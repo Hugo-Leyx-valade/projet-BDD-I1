@@ -1,7 +1,7 @@
 # 🎲 Database Project — Board Game Rental Platform
 
 **Authors:**  
-Vdstx · Hugo Leyx-Valade · Léopold Billecocq
+Victor Dallon · Hugo Leyx-Valade · Léopold Billecocq · Steeve
 
 ## 📌 Project Overview
 
