@@ -1,36 +1,43 @@
 const express = require('express');
-const mysql = require('mysql2');
-
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
-// Remplace par les infos de connexion de ton instance MySQL sur Aiven
-const connection = mysql.createConnection({
-  host: 'mysql-37e92356-bdd-b872.h.aivencloud.com',  // Exemple: 'your-db-host.aivencloud.com'
-  user: 'avnadmin',  // Ton nom d'utilisateur
-  password: 'AVNS_22SXqEsvWu94MrZlLJU',  // Ton mot de passe
-  database: 'defaultdb',  // Le nom de ta base de données
-  port: 21099,  // Port par défaut MySQL
-  ssl: {
-    ca: './ca.pem',  // Aiven fournit un certificat SSL
-    rejectUnauthorized: false,
-  }
+app.use(cors({
+  origin: 'http://localhost:5173', // Autoriser uniquement cette origine
+  methods: 'GET,POST', // Autoriser uniquement les méthodes GET et POST
+  allowedHeaders: 'Content-Type,Authorization', // Autoriser uniquement ces en-têtes
+  credentials: true // Autoriser les informations d'identification
+}));
+
+// Middleware pour lire du JSON dans les requêtes
+app.use(express.json());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
 });
 
-// Teste la connexion MySQL
-connection.connect((err) => {
-  if (err) {
-    console.error('Erreur de connexion à la base de données :', err.stack);
-    return;
-  }
-  console.log('Connecté à MySQL sur Aiven !');
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello from backend connected to MySQL!');
-});
-
+// Lancer le serveur
 app.listen(port, () => {
-  console.log(`Backend server running at http://localhost:${port}`);
+  console.log(`✅ Serveur lancé sur http://localhost:${port}`);
 });
+
+
+
+// ------------------------  ROUTES  ----------------------------------
+
+// router test server connecté 
+app.get('/', (req, res) => {
+  res.send('🚀 Serveur Node.js avec MySQL connecté !');
+});
+
+
+// Routes pour les users (redirige vers routes/users.js) 
+const userRoutes = require('./routes/users');
+app.use('/users', userRoutes);
+
+
+
+app.get("/")
 
