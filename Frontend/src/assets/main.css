@@ -1,8 +1,9 @@
 @import './base.css';
 
 #app {
-  min-width: 1860px;
-  max-width: 1860px;
+  min-width: 1875px;
+  max-width: 1875px;
+  min-height: 920px;
   font-weight: normal;
 }
 
@@ -20,15 +21,10 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1875px) {
   body {
     display: flex;
     place-items: center;
-    background-color: rgba(43, 255, 0, 0);
   }
 
-  #app {
-    display: grid;
-    grid-template-columns: 0fr 0fr;
-  }
 }

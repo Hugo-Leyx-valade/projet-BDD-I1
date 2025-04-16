@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const app = express();
 const port = 3000;
 
@@ -12,7 +13,6 @@ app.use(cors({
 
 // Middleware pour lire du JSON dans les requêtes
 app.use(express.json());
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
@@ -23,6 +23,7 @@ app.listen(port, () => {
   console.log(`✅ Serveur lancé sur http://localhost:${port}`);
 });
 
+app.use(compression());
 
 
 // ------------------------  ROUTES  ----------------------------------

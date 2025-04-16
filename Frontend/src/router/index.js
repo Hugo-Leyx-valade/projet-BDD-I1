@@ -19,9 +19,9 @@ const router = createRouter({
       component: catalogue,
     },
     {
-      path: '/jeu',
+      path: '/jeu/:id',
       name:'jeu',
-      props:
+      props:true,
       component: jeu,
     },
   ],

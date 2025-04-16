@@ -1,4 +1,6 @@
 <template>
+      <Navbar/>
+
     <div class="game-details-container">
       <div class="game-card">
         <h2 class="game-title">{{ game.Title }}</h2>
@@ -19,7 +21,8 @@
   
   <script>
   import axios from 'axios';
-  
+  import Navbar from './navbar.vue';
+
   export default {
     name: 'GameDetails',
     data() {
@@ -27,12 +30,14 @@
         game: {}
       };
     },
+    components: {
+        Navbar,
+    },
     mounted() {
       const gameId = this.$route.params.id;
       axios.get(`http://localhost:3000/catalogue/${gameId}`)
         .then(response => {
           this.game = response.data;
-          console.log(JSON.stringify(this.game));
         })
         .catch(error => {
           console.error('Erreur lors du chargement des détails du jeu', error);

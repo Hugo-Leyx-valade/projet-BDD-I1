@@ -1,4 +1,5 @@
 <template>
+  <Navbar/>
   <div class="catalogue-container">
     <h2 class="title">🎲 Liste des jeux</h2>
     <div class="table-container">
@@ -9,15 +10,13 @@
             <th>Année</th>
             <th>Joueurs</th>
             <th>Temps de jeu</th>
-            <th>Plage (min-max)</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="jeu in jeux" :key="jeu.Title">
-            <td>{{ jeu.Title }}</td>
+          <tr v-for="jeu in jeux">
+            <td><router-link :to="{ name: 'jeu', params: { id: jeu.id } }">{{ jeu.Title }}</router-link></td>
             <td>{{ jeu.Yearpublished }}</td>
             <td>{{ jeu.Minplayers }} à {{ jeu.Maxplayers }}</td>
-            <td>{{ jeu.Playtime }} min</td>
             <td>{{ jeu.Minplaytime }} - {{ jeu.Maxplaytime }} min</td>
           </tr>
         </tbody>
@@ -28,6 +27,7 @@
 
 <script>
 import axios from 'axios';
+import Navbar from './navbar.vue';
 
 export default {
   name: 'Catalogue',
@@ -35,6 +35,9 @@ export default {
     return {
       jeux: [],
     };
+  },
+  components: {
+    Navbar,
   },
   mounted() {
     axios.get('http://localhost:3000/catalogue')

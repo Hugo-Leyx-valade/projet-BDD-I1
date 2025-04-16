@@ -17,6 +17,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -106,5 +107,9 @@ label, h2{
 }
 h2{
   color: #38220f;
+}
+
+body{
+  background: beige;
 }
 </style>
