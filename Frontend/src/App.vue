@@ -1,85 +1,118 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div id="app">
+    <!-- Barre latérale (au-dessus de la navbar) -->
+    <header class="sidebar">
+      <h1 class="app-name">Nom de l'Application</h1>
+    </header>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <!-- Navbar -->
+    <Navbar />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <!-- Contenu principal -->
+    <div class="content">
+      <router-view />
     </div>
-  </header>
-
-  <RouterView />
+  </div>
 </template>
 
+<script>
+
+export default {
+  name: 'App',
+};
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+/* Reset de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+/* Barre latérale - au-dessus de la navbar */
+.sidebar {
+  background-color: #333;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 60px; /* Hauteur de la barre latérale */
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
+/* Nom de l'application centré dans la barre latérale */
+.sidebar .app-name {
+  color: white;
+  font-size: 1.5rem;
   text-align: center;
-  margin-top: 2rem;
+  flex-grow: 1; /* Prend l'espace restant pour centrer le nom */
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+/* Navbar - Fixée en dessous de la barre latérale */
+.navbar {
+  background-color: #333;
+  padding: 10px;
+  text-align: center;
+  z-index: 10;
+  width: 100%;
+  position: fixed;
+  top: 60px; /* Place la navbar juste en dessous de la barre latérale */
+  left: 0;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+/* Liens dans la Navbar */
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.navbar li {
+  margin: 0 20px;
 }
 
-nav a:first-of-type {
-  border: 0;
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.navbar a:hover {
+  text-decoration: underline;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+/* Contenu sous la navbar */
+.content {
+  margin-top: 120px; /* Décale le contenu pour qu'il ne soit pas masqué par la navbar */
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+/* Styles généraux pour les titres */
+h2 {
+  text-align: center;
+  color: #2e4a3c;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+#app {
+  background-color: #ece0d1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Assure que l'application occupe toute la hauteur de la fenêtre */
 }
 </style>

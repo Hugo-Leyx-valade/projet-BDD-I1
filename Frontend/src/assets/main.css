@@ -1,11 +1,22 @@
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/* Fond uniforme sur tout l'écran */
+html, body {
+
+  background-color: #f0f0f0; /* Change cette couleur si besoin */
 }
+
+#app {
+  min-width: 100vw; /* Prend toute la largeur de la fenêtre */
+  min-height: 100vh; /* Prend toute la hauteur */
+  width: 100%;
+  height: 100%;
+  font-weight: normal;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #ece0d1;
+}
+
 
 a,
 .green {
@@ -21,7 +32,7 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1875px) {
   body {
     display: flex;
     place-items: center;
@@ -30,6 +41,12 @@ a,
   #app {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #app {
+    padding: 1rem;
   }
 }
