@@ -52,18 +52,15 @@ export default {
 <style scoped>
 .catalogue-container {
   padding: 2rem;
-  max-width: 1920px; /* Augmente la largeur maximale */
-  margin: 150px auto 2rem auto; /* Décale sous la navbar */
-  background-color: #fdfcf9;
+  max-width: 1200px; /* Limite la largeur maximale pour une meilleure lisibilité */
+  margin: 1px auto 2rem auto; /* Centre le conteneur horizontalement */
+  background-color: #fdfcf900;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  width: 200%;
-  margin-left: -37%;
-  margin-top: -5%;
-  padding-bottom:10%;
+  text-align: center; /* Centre le contenu horizontalement */
+  margin-top: -3%;
 }
 
 .title {
-  justify-content: center;
   text-align: center;
   color: #3f2d2d;
   margin-bottom: 2rem;
@@ -73,8 +70,9 @@ export default {
 .table-container {
   overflow-x: auto;
   border-radius: 8px;
-  width: 100%;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin: 0 0; /* Centre le conteneur de la table horizontalement */
+  width: fit-content; /* Ajuste la largeur du conteneur en fonction du contenu */
 }
 
 .games-table {
@@ -108,7 +106,7 @@ export default {
 
 .games-table th,
 .games-table td {
-  min-width: 150px; 
-  color: #3e2f1c;/* Définit une largeur minimale pour les colonnes */
+  min-width: 150px; /* Définit une largeur minimale pour les colonnes */
+  color: #3e2f1c;
 }
 </style>

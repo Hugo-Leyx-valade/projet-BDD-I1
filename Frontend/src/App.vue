@@ -36,7 +36,7 @@ export default {
 
 /* Barre latérale - au-dessus de la navbar */
 .sidebar {
-  background-color: #333;
+  background-color: 	#68775b;
   padding: 10px;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@ export default {
 
 /* Navbar - Fixée en dessous de la barre latérale */
 .navbar {
-  background-color: #333;
+  background-color: 	#bad5a4;
   padding: 10px;
   text-align: center;
   z-index: 10;
@@ -83,7 +83,7 @@ export default {
 }
 
 .navbar a {
-  color: white;
+  color: #38220f;
   text-decoration: none;
   font-size: 18px;
 }
@@ -96,9 +96,12 @@ export default {
 .content {
   margin-top: 120px; /* Décale le contenu pour qu'il ne soit pas masqué par la navbar */
   padding: 2rem;
-  flex: 1;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 /* Styles généraux pour les titres */
@@ -139,5 +142,13 @@ h2 {
 .card p {
   margin: 0.3rem 0;
   color: #3e3e3e;
+}
+
+#app {
+  background-color: 	#ece0d1;
+  border-color: #ece0d1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

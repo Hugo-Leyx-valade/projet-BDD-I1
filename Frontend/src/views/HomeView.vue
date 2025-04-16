@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-container">
     <h2>{{ isLogin ? 'Connexion' : 'Inscription' }}</h2>
     <form @submit.prevent="submitForm">
       <div v-if="!isLogin">
@@ -24,7 +24,7 @@ export default {
       pseudo: '',
       email: '',
       password: '',
-      user: [],
+      users: [],
     };
   },
   methods: {
@@ -51,7 +51,7 @@ export default {
           console.error('Erreur :', data.error);
         } else {
           console.log('Succès :', data.message);
-          this.user = JSON.stringify(data.user);
+          this.users = JSON.stringify(data.value);
           window.location.href = "/catalogue";
         }
       })
@@ -60,3 +60,51 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+label {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+label, h2{
+  color: #38220f;
+  font-weight: bolder;
+}
+h2{
+  color: #38220f;
+}
+</style>

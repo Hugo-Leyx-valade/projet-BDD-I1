@@ -1,9 +1,8 @@
 @import './base.css';
 
 #app {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-width: 1860px;
+  max-width: 1860px;
   font-weight: normal;
 }
 
@@ -25,12 +24,11 @@ a,
   body {
     display: flex;
     place-items: center;
-    background-color: antiquewhite;
+    background-color: rgba(43, 255, 0, 0);
   }
 
   #app {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    grid-template-columns: 0fr 0fr;
   }
 }

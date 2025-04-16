@@ -16,7 +16,7 @@ export default {
 
 <style scoped>
 .navbar {
-  background-color: #333;
+  background-color: #68775b;
   padding: 10px 0; /* Ajuste le padding pour centrer verticalement le contenu */
   text-align: center;
   width: 100%; /* Assurer que la largeur est de 100% */
@@ -36,7 +36,7 @@ export default {
 }
 
 .navbar a {
-  color: white;
+  color: #38220f;
   text-decoration: none;
   font-size: 18px;
   padding: 10px 15px; /* Ajoute du padding pour rendre les liens cliquables plus facilement */
