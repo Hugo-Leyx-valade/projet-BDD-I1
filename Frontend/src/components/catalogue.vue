@@ -1,0 +1,114 @@
+<template>
+  <div class="catalogue-container">
+    <h2 class="title">🎲 Liste des jeux</h2>
+    <div class="table-container">
+      <table class="games-table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Année</th>
+            <th>Joueurs</th>
+            <th>Temps de jeu</th>
+            <th>Plage (min-max)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="jeu in jeux" :key="jeu.Title">
+            <td>{{ jeu.Title }}</td>
+            <td>{{ jeu.Yearpublished }}</td>
+            <td>{{ jeu.Minplayers }} à {{ jeu.Maxplayers }}</td>
+            <td>{{ jeu.Playtime }} min</td>
+            <td>{{ jeu.Minplaytime }} - {{ jeu.Maxplaytime }} min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'Catalogue',
+  data() {
+    return {
+      jeux: [],
+    };
+  },
+  mounted() {
+    axios.get('http://localhost:3000/catalogue')
+      .then(response => {
+        this.jeux = response.data;
+        console.log(this.jeux);
+      })
+      .catch(error => {
+        console.error('Erreur lors du chargement des jeux', error);
+      });
+  }
+};
+</script>
+
+<style scoped>
+.catalogue-container {
+  padding: 2rem;
+  max-width: 1920px; /* Augmente la largeur maximale */
+  margin: 150px auto 2rem auto; /* Décale sous la navbar */
+  background-color: #fdfcf9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 200%;
+  margin-left: -37%;
+  margin-top: -5%;
+  padding-bottom:10%;
+}
+
+.title {
+  justify-content: center;
+  text-align: center;
+  color: #3f2d2d;
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.games-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fffefc;
+  table-layout: auto; /* Permet aux colonnes de s'ajuster automatiquement */
+}
+
+.games-table th,
+.games-table td {
+  padding: 1rem; /* Augmente l'espace intérieur des cellules */
+  text-align: center;
+  border: 1px solid #d6c7b7;
+  word-wrap: break-word; /* Permet de casser les mots longs */
+  height: 2rem; /* Augmente la hauteur des lignes */
+}
+
+.games-table th {
+  background-color: #e9d8c5;
+  color: #3e2f1c;
+}
+
+.games-table tr:nth-child(even) {
+  background-color: #f7f3ef;
+}
+
+.games-table tr:hover {
+  background-color: #f0e9e1;
+}
+
+.games-table th,
+.games-table td {
+  min-width: 150px; 
+  color: #3e2f1c;/* Définit une largeur minimale pour les colonnes */
+}
+</style>

@@ -52,6 +52,7 @@ export default {
         } else {
           console.log('Succès :', data.message);
           this.user = JSON.stringify(data.user);
+          window.location.href = "/catalogue";
         }
       })
       .catch(error => console.error('Erreur :', error));

@@ -62,6 +62,7 @@ exports.loginUser = (req, res) => {
       if (result) {
         res.status(200).json({ message: 'Connexion réussie', user: results[0] });
       } else {
+        console.log(password);
         res.status(401).json({ error: 'Mot de passe incorrect' });
       }
   })

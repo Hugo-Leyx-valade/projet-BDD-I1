@@ -32,11 +32,13 @@ app.get('/', (req, res) => {
   res.send('🚀 Serveur Node.js avec MySQL connecté !');
 });
 
-
 // Routes pour les users (redirige vers routes/users.js) 
 const userRoutes = require('./routes/users');
 app.use('/users', userRoutes);
 
+// Routes pour les users (redirige vers routes/users.js) 
+const jeuRoutes = require('./routes/jeux');
+app.use('/catalogue', jeuRoutes);
 
 
 app.get("/")
