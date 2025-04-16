@@ -54,10 +54,7 @@ export default {
 
 <style scoped>
 .catalogue-container {
-  padding: 2rem;
-  max-width: 1200px; /* Limite la largeur maximale pour une meilleure lisibilité */
-  margin: 1px auto 2rem auto; /* Centre le conteneur horizontalement */
-  background-color: #fdfcf900;
+  background-color: #00a2ff00;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center; /* Centre le contenu horizontalement */
   margin-top: -3%;

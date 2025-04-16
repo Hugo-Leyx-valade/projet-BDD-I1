@@ -16,6 +16,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'App',
 };
@@ -23,11 +24,15 @@ export default {
 
 <style scoped>
 /* Reset de base */
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 /* Barre latérale - au-dessus de la navbar */
 .sidebar {
-  background-color: 	#68775b;
+  background-color: #333;
   padding: 10px;
   display: flex;
   align-items: center;
@@ -46,6 +51,41 @@ export default {
   font-size: 1.5rem;
   text-align: center;
   flex-grow: 1; /* Prend l'espace restant pour centrer le nom */
+}
+
+/* Navbar - Fixée en dessous de la barre latérale */
+.navbar {
+  background-color: #333;
+  padding: 10px;
+  text-align: center;
+  z-index: 10;
+  width: 100%;
+  position: fixed;
+  top: 60px; /* Place la navbar juste en dessous de la barre latérale */
+  left: 0;
+}
+
+/* Liens dans la Navbar */
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar li {
+  margin: 0 20px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
 }
 
 /* Contenu sous la navbar */
@@ -68,44 +108,11 @@ h2 {
   font-size: 2rem;
 }
 
-/* Card container (catalogue) */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-/* Style des cartes */
-.card {
-  background-color: #fff;
-  border: 2px solid #8b5e3c;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  background-color: #f9f6f2;
-}
-
-.card h3 {
-  margin: 0 0 1rem 0;
-  color: #2e4a3c;
-}
-
-.card p {
-  margin: 0.3rem 0;
-  color: #3e3e3e;
-}
-
 #app {
-  background-color: 	#ece0d1;
-  border-color: #ece0d1;
+  background-color: #ece0d1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #ece0d1;
+  min-height: 100vh; /* Assure que l'application occupe toute la hauteur de la fenêtre */
 }
 </style>

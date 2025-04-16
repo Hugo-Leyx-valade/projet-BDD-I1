@@ -1,3 +1,4 @@
+import { isAuthenticated } from '../auth';
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import catalogue from '@/components/catalogue.vue'
@@ -17,12 +18,28 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: catalogue,
+      beforeEnter: (to, from, next) => {
+        if (!isAuthenticated()) {
+          next('/');  // Redirige vers login si l'utilisateur n'est pas authentifié
+          alert("Vous n'êtes pas authentifié !")
+        } else {
+          next();  // Laisse passer si authentifié
+        }
+      }
     },
     {
       path: '/jeu/:id',
       name:'jeu',
       props:true,
       component: jeu,
+      beforeEnter: (to, from, next) => {
+        if (!isAuthenticated()) {
+          next('/');  // Redirige vers login si l'utilisateur n'est pas authentifié
+          alert("Vous n'êtes pas authentifié !")
+        } else {
+          next();  // Laisse passer si authentifié
+        }
+      }
     },
   ],
 })

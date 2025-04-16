@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { loginUser } from '../auth';  // Importer notre méthode de login
 
 export default {
   data() {
@@ -52,7 +53,10 @@ export default {
           console.error('Erreur :', data.error);
         } else {
           console.log('Succès :', data.message);
-          this.users = JSON.stringify(data.value);
+          console.log(data.user)
+          const token = data.token;
+          loginUser(token);
+          localStorage.setItem('user', JSON.stringify(data.user));
           window.location.href = "/catalogue";
         }
       })
@@ -69,9 +73,11 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  max-width: 400px; /* Limite la largeur maximale pour les petits écrans */
   padding: 2rem;
   box-sizing: border-box;
+  margin: 0 auto; /* Centre le conteneur horizontalement */
+  background-color: #38220f;
 }
 
 form {
@@ -79,7 +85,6 @@ form {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 400px;
 }
 
 label {
@@ -101,15 +106,12 @@ button {
   cursor: pointer;
 }
 
-label, h2{
+label, h2 {
   color: #38220f;
   font-weight: bolder;
 }
-h2{
-  color: #38220f;
-}
 
-body{
-  background: beige;
+h2 {
+  color: #38220f;
 }
 </style>
