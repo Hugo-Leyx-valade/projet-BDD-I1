@@ -12,7 +12,7 @@ exports.getAllJeux = (req, res) => {
 
 exports.getJeuById = (req, res) => {
   const userId = req.params.id;
-  db.query('select Jeu.Title,Jeu.Description, Jeu.Yearpublished, Jeu.Minplayers, Jeu.Maxplayers, Jeu.Playtime, Jeu.Minplaytime, Jeu.Maxplaytime, Ludotheque.Name, Ludotheque.idDepartement, Ludotheque.ludothequecol, Stock.Stock from Jeu join Stock on Stock.idJeu = Jeu.id join Ludotheque on Ludotheque.idLudotheque = Stock.idLudotheque where Jeu.id = ?;', [userId], (err, results) => {
+  db.query('select Jeu.Title,Jeu.Description, Jeu.Yearpublished, Jeu.Minplayers, Jeu.Maxplayers, Jeu.Playtime, Jeu.Minplaytime, Jeu.Maxplaytime, Ludotheque.Name, Users.idDepartement, Ludotheque.ludothequecol, Stock.Stock from Jeu join Stock on Stock.idJeu = Jeu.id join Ludotheque on Ludotheque.idLudotheque = Stock.idLudotheque join Users on Users.idUser = Ludotheque.idLudotheque where Jeu.id = ?;', [userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Erreur MySQL' });
     }

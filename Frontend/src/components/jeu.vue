@@ -1,17 +1,17 @@
 <template>
       <Navbar />
-      <div class="game-details-container">
+      <div class="game-details-container" v-if="!isLoading">
         <div class="game-card">
-          <h2 class="game-title">{{ game.Title }}</h2>
-          <p class="game-year">Année de publication : {{ game.Yearpublished }}</p>
-          <p class="game-explication">{{ game.Explication }}</p>
+          <h2 class="game-title">{{ game[0].Title }}</h2>
+          <p class="game-year">Année de publication : {{ game[0].Yearpublished }}</p>
+          <p class="game-explication">{{ game[0].Explication }}</p>
           <div class="game-info">
             <div class="game-players">
-              <p>Nombre de joueurs : {{ game.Minplayers }} à {{ game.Maxplayers }}</p>
+              <p>Nombre de joueurs : {{ game[0].Minplayers }} à {{ game[0].Maxplayers }}</p>
             </div>
             <div class="game-time">
-              <p>Temps de jeu : {{ game.Playtime }} min</p>
-              <p>Plage de temps de jeu : {{ game.Minplaytime }} - {{ game.Maxplaytime }} min</p>
+              <p>Temps de jeu : {{ game[0].Playtime }} min</p>
+              <p>Plage de temps de jeu : {{ game[0].Minplaytime }} - {{ game[0].Maxplaytime }} min</p>
             </div>
           </div>
         </div>
@@ -34,22 +34,25 @@
       return {
         game: {},
         user: JSON.parse(localStorage.getItem('user')) || {},  // Récupère les données utilisateur depuis localStorage
+        isLoading: true, // par défaut à true
       };
     },
     components: {
       Navbar,
     },
     mounted() {
-      const gameId = this.$route.params.id;
-      // Récupérer les détails du jeu
-      axios.get(`http://localhost:3000/catalogue/${gameId}`)
-        .then(response => {
-          this.game = response.data;
-        })
-        .catch(error => {
-          console.error('Erreur lors du chargement des détails du jeu', error);
-        });
-    },
+  const gameId = this.$route.params.id;
+  axios.get(`http://localhost:3000/catalogue/${gameId}`)
+    .then(response => {
+      this.game = response.data;
+    })
+    .catch(error => {
+      console.error('Erreur lors du chargement des détails du jeu', error);
+    })
+    .finally(() => {
+      this.isLoading = false;
+    });
+  },
     computed: {
     activeLudo() {
         if (this.game && Array.isArray(this.game)) {
