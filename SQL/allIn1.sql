@@ -36,11 +36,12 @@ CREATE TABLE Loue (
 
 
 CREATE TABLE Ludotheque (
-  idLudotheque INT PRIMARY KEY AUTO_INCREMENT,
+  idLudotheque INT PRIMARY KEY, -- Même valeur que idUser
   Name VARCHAR(45) NOT NULL,
-  idDepartement INT,
-  Ludothequecol VARCHAR(45)
+  Ludothequecol VARCHAR(45),
+  FOREIGN KEY (idLudotheque) REFERENCES Users(idUser) ON DELETE CASCADE
 );
+
 
 CREATE TABLE Stock (
   idLudotheque INT,
@@ -173,39 +174,231 @@ INSERT INTO Jeu (id, Title, Description, Yearpublished, Minplayers, Maxplayers, 
 INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
 VALUES
 (1, 'victor.dallon@efrei.net', 'Victor', 'abcd', 33, 1),
-(2, 'hugo.leyxvalade@efrei.net', 'Hugo', 'abcd', 33, 2),
-(3, 'leopold.billecocq@efrei.net', 'Leopold', 'abcd', 33, 3);
+(2, 'hugo.leyxvalade@efrei.net', 'Hugo', 'abcd', 33, 1),
+(3, 'leopold.billecocq@efrei.net', 'Leopold', 'abcd', 33, 1);
 
-INSERT INTO Ludotheque (idludotheque, Name, idDepartement, ludothequecol)
-VALUES
-(1, 'JouePlaisir Paris', 75, 'PAR-LUDO'),
-(2, 'LudoFun Bordeaux', 33, 'BDX-LUDO'),
-(3, 'LyonJoue', 69, 'LYO-LUDO'),
-(4, 'Marseille en Jeux', 13, 'MRS-LUDO'),
-(5, 'LilleLudo', 59, 'LIL-LUDO'),
-(6, 'ToulouseJoue', 31, 'TLS-LUDO'),
-(7, 'NiceLudo', 6, 'NCE-LUDO'),
-(8, 'NantesJoue', 44, 'NAN-LUDO'),
-(9, 'StrasLudo', 67, 'STR-LUDO'),
-(10, 'MontpellierJoue', 34, 'MPL-LUDO'),
-(11, 'RennesLudo', 35, 'REN-LUDO'),
-(12, 'GrenobleJoue', 38, 'GRE-LUDO'),
-(13, 'RouenLudo', 76, 'ROU-LUDO'),
-(14, 'ToursJoue', 37, 'TOU-LUDO'),
-(15, 'NancyLudo', 54, 'NAN-LUDO'),
-(16, 'DijonJoue', 21, 'DIJ-LUDO'),
-(17, 'AngersLudo', 49, 'ANG-LUDO'),
-(18, 'VilleurbanneJoue', 69, 'VIL-LUDO'),
-(19, 'LeHavreLudo', 76, 'HAV-LUDO'),
-(20, 'Saint-EtienneJoue', 42, 'STE-LUDO');
+-- Ludothèque 1 (ID 4)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (4, 'ludo1@example.com', 'LudoOne', 'hashed_pass1', 75, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (4, 'Ludothèque Paris Centre', 'Salle A');
+
+-- Ludothèque 2 (ID 5)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (5, 'ludo2@example.com', 'LudoTwo', 'hashed_pass2', 13, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (5, 'Ludothèque Marseille', 'Salle B');
+
+-- Ludothèque 3 (ID 6)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (6, 'ludo3@example.com', 'LudoThree', 'hashed_pass3', 33, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (6, 'Ludothèque Lyon', 'Salle C');
+
+-- Ludothèque 4 (ID 7)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (7, 'ludo4@example.com', 'LudoFour', 'hashed_pass4', 59, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (7, 'Ludothèque Lille', 'Salle D');
+
+-- Ludothèque 5 (ID 8)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (8, 'ludo5@example.com', 'LudoFive', 'hashed_pass5', 31, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (8, 'Ludothèque Toulouse', 'Salle E');
+
+-- Ludothèque 6 (ID 9)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (9, 'ludo6@example.com', 'LudoSix', 'hashed_pass6', 67, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (9, 'Ludothèque Strasbourg', 'Salle F');
+
+-- Ludothèque 7 (ID 10)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (10, 'ludo7@example.com', 'LudoSeven', 'hashed_pass7', 44, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (10, 'Ludothèque Nantes', 'Salle G');
+
+-- Ludothèque 8 (ID 11)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (11, 'ludo8@example.com', 'LudoEight', 'hashed_pass8', 38, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (11, 'Ludothèque Grenoble', 'Salle H');
+
+-- Ludothèque 9 (ID 12)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (12, 'ludo9@example.com', 'LudoNine', 'hashed_pass9', 76, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (12, 'Ludothèque Rouen', 'Salle I');
+
+-- Ludothèque 10 (ID 13)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (13, 'ludo10@example.com', 'LudoTen', 'hashed_pass10', 34, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (13, 'Ludothèque Montpellier', 'Salle J');
+
+-- Ludothèque 11 (ID 14)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (14, 'ludo11@example.com', 'LudoEleven', 'hashed_pass11', 49, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (14, 'Ludothèque Angers', 'Salle K');
+
+-- Ludothèque 12 (ID 15)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (15, 'ludo12@example.com', 'LudoTwelve', 'hashed_pass12', 35, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (15, 'Ludothèque Rennes', 'Salle L');
+
+-- Ludothèque 13 (ID 16)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (16, 'ludo13@example.com', 'LudoThirteen', 'hashed_pass13', 95, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (16, 'Ludothèque Cergy', 'Salle M');
+
+-- Ludothèque 14 (ID 17)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (17, 'ludo14@example.com', 'LudoFourteen', 'hashed_pass14', 93, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (17, 'Ludothèque Bobigny', 'Salle N');
+
+-- Ludothèque 15 (ID 18)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (18, 'ludo15@example.com', 'LudoFifteen', 'hashed_pass15', 69, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (18, 'Ludothèque Villeurbanne', 'Salle O');
+
+-- Ludothèque 16 (ID 19)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (19, 'ludo16@example.com', 'LudoSixteen', 'hashed_pass16', 90, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (19, 'Ludothèque Montreuil', 'Salle P');
+
+-- Ludothèque 17 (ID 20)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (20, 'ludo17@example.com', 'LudoSeventeen', 'hashed_pass17', 60, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (20, 'Ludothèque Dunkerque', 'Salle Q');
+
+-- Ludothèque 18 (ID 21)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (21, 'ludo18@example.com', 'LudoEighteen', 'hashed_pass18', 25, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (21, 'Ludothèque Dole', 'Salle R');
+
+-- Ludothèque 19 (ID 22)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (22, 'ludo19@example.com', 'LudoNineteen', 'hashed_pass19', 68, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (22, 'Ludothèque Colmar', 'Salle S');
+
+-- Ludothèque 20 (ID 23)
+INSERT INTO Users (idUser, Email, Pseudo, password, idDepartement, Role)
+VALUES (23, 'ludo20@example.com', 'LudoTwenty', 'hashed_pass20', 88, 2);
+INSERT INTO Ludotheque (idLudotheque, Name, Ludothequecol)
+VALUES (23, 'Ludothèque Albi', 'Salle T');
 
 
-
-INSERT INTO Stock (idludotheque, idJeu, Stock)
-VALUES
-(1, 224517, 5),
-(2, 42, 10),
-(2, 146508, 2);
+INSERT INTO Stock (idLudotheque, idJeu, Stock) VALUES
+(5, 68448, 7),
+(12, 173346, 3),
+(4, 103343, 8),
+(8, 31260, 4),
+(17, 6249, 1),
+(5, 124742, 9),
+(19, 15987, 6),
+(14, 205637, 2),
+(6, 230802, 5),
+(6, 3955, 1),
+(10, 37111, 8),
+(7, 10547, 6),
+(18, 170216, 9),
+(20, 11, 2),
+(11, 224517, 4),
+(15, 822, 7),
+(4, 13, 3),
+(9, 102794, 2),
+(13, 18602, 8),
+(16, 171, 5),
+(5, 478, 6),
+(12, 201808, 9),
+(8, 178900, 3),
+(8, 158899, 7),
+(17, 124361, 4),
+(9, 39463, 6),
+(19, 131357, 5),
+(14, 150376, 8),
+(13, 39856, 4),
+(6, 36218, 3),
+(10, 40834, 2),
+(7, 72125, 7),
+(18, 146021, 6),
+(20, 199792, 1),
+(11, 157354, 3),
+(15, 172, 5),
+(4, 136063, 9),
+(9, 65244, 7),
+(13, 31481, 4),
+(16, 174430, 6),
+(5, 193738, 8),
+(12, 98778, 5),
+(14, 2655, 2),
+(8, 148949, 7),
+(17, 54043, 3),
+(8, 70323, 6),
+(19, 204583, 4),
+(14, 35677, 1),
+(11, 110327, 8),
+(6, 50, 2),
+(10, 129622, 5),
+(7, 143884, 6),
+(18, 96848, 3),
+(20, 463, 4),
+(11, 205059, 2),
+(15, 10630, 7),
+(4, 1406, 1),
+(9, 1927, 6),
+(13, 181304, 3),
+(16, 30549, 4),
+(5, 161936, 8),
+(12, 163412, 2),
+(4, 2651, 9),
+(8, 3076, 6),
+(17, 28143, 4),
+(5, 181, 5),
+(19, 121921, 3),
+(14, 132531, 6),
+(4, 237182, 7),
+(6, 9220, 2),
+(10, 199561, 4),
+(7, 194655, 3),
+(18, 320, 1),
+(20, 169786, 8),
+(11, 15062, 5),
+(15, 157969, 2),
+(4, 40692, 6),
+(9, 162886, 3),
+(13, 148228, 4),
+(16, 147020, 7),
+(5, 187645, 6),
+(12, 34635, 1),
+(6, 192291, 5),
+(8, 133473, 2),
+(17, 146508, 8),
+(5, 70919, 3),
+(19, 120677, 7),
+(14, 167791, 4),
+(4, 84876, 6),
+(6, 244521, 2),
+(10, 41114, 9),
+(7, 128882, 5),
+(18, 182028, 3),
+(20, 9209, 7),
+(11, 14996, 4),
+(15, 42, 6),
+(4, 12333, 3),
+(9, 126163, 1),
+(13, 183394, 5),
+(16, 266192, 8);
 
 INSERT INTO Evenement (idEvenement, maxParticipant, Date, Evenementcol1)
 VALUES
@@ -367,9 +560,5 @@ BEGIN
     SET MESSAGE_TEXT = 'dateRetour doit être supérieur ou égal à dateDepart';
   END IF;
 END;$$
-
-UPDATE Users
-SET Password = '$2a$10$vTAPbR6b4UAMH6xmFxhYqOasSc99Vb03KuHwufDjHG3npgpQiLfQm'
-WHERE idUser = 3;
 
 

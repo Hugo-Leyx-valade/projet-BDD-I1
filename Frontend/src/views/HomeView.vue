@@ -1,15 +1,30 @@
 <template>
   <div class="form-container">
-    <h2>{{ isLogin ? 'Connexion' : 'Inscription' }}</h2>
+    <h2 class="texte">{{ isLogin ? 'Connexion' : 'Inscription' }}</h2>
     <form @submit.prevent="submitForm">
       <div v-if="!isLogin">
-        <label for="pseudo">Pseudo:</label>
-        <input type="text" id="pseudo" v-model="pseudo" required />
+        <label for="pseudo" class="texte">Pseudo:</label>
+        <input type="text" class="ecriture" id="pseudo" v-model="pseudo" required />
       </div>
-      <label for="email">Email:</label>
-      <input type="email" id="email" v-model="email" required />
-      <label for="password">Mot de passe:</label>
-      <input type="password" id="password" v-model="password" required />
+      <label for="email" class="texte">Email:</label>
+      <input type="email" class="ecriture" id="email" v-model="email" required />
+      <label for="password" class="texte">Mot de passe:</label>
+      <input type="password" class="ecriture" id="password" v-model="password" required />
+      <div v-if="!isLogin" id="departement-div">
+      <label for="departement" class="texte">Département :</label>
+      <input
+        type="number"
+        id="departement"
+        class="ecriture"
+        v-model="departement"
+        min="1"
+        max="101"
+        required
+      />
+      <p v-if="departement && (departement < 1 || departement > 101)" style="color:red;">
+        Le numéro de département doit être entre 1 et 101.
+      </p>
+    </div>
       <button type="submit">{{ isLogin ? 'Se connecter' : 'S\'inscrire' }}</button>
     </form>
     <button @click="toggleForm">{{ isLogin ? 'Pas encore inscrit ?' : 'Déjà inscrit ?' }}</button>
@@ -26,6 +41,7 @@ export default {
       pseudo: '',
       email: '',
       password: '',
+      departement:null,
       users: [],
     };
   },
@@ -44,7 +60,8 @@ export default {
         body: JSON.stringify({
           pseudo: this.pseudo,
           email: this.email,
-          password: this.password
+          password: this.password,
+          departement:this.departement
         })
       })
       .then(response => response.json())
@@ -52,8 +69,8 @@ export default {
         if (data.error) {
           console.error('Erreur :', data.error);
         } else {
+          console.log(data)
           console.log('Succès :', data.message);
-          console.log(data.user)
           const token = data.token;
           loginUser(token);
           localStorage.setItem('user', JSON.stringify(data.user));
@@ -77,7 +94,7 @@ export default {
   padding: 2rem;
   box-sizing: border-box;
   margin: 0 auto; /* Centre le conteneur horizontalement */
-  background-color: #38220f;
+  background-color: 	#68775b;
 }
 
 form {
@@ -113,5 +130,26 @@ label, h2 {
 
 h2 {
   color: #38220f;
+}
+
+#departement{
+  width: 60%;
+}
+
+.ecriture{
+  background-color:	#bad5a4;
+  box-shadow: none;
+  border-width: 0cap;
+  border-radius: 3%;
+}
+
+.texte{
+  color: aliceblue;
+}
+
+#departement-div{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
