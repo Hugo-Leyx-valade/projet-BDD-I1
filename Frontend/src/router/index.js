@@ -1,15 +1,26 @@
-import { isAuthenticated } from '../auth';
+import { isAuthenticated, retrieveRole } from '../auth';
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import userConnect from '../views/userConnect.vue'
+import ludoConnect from '../views/ludoConnect.vue'
 import catalogue from '@/components/catalogue.vue'
 import jeu from '@/components/jeu.vue'
+import panelLudo from '@/components/panelLudotheque.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
+      redirect: '/Login'
+    },
+    {
+      path: '/Login',
       name: 'home',
-      component: HomeView,
+      component: userConnect,
+    },
+    {
+      path: '/ludoGate',
+      name:'ludoGate',
+      component:ludoConnect,
     },
     {
       path: '/catalogue',
@@ -20,7 +31,7 @@ const router = createRouter({
       component: catalogue,
       beforeEnter: (to, from, next) => {
         if (!isAuthenticated()) {
-          next('/');  // Redirige vers login si l'utilisateur n'est pas authentifié
+          next('/Login');  // Redirige vers login si l'utilisateur n'est pas authentifié
           alert("Vous n'êtes pas authentifié !")
         } else {
           next();  // Laisse passer si authentifié
@@ -34,13 +45,30 @@ const router = createRouter({
       component: jeu,
       beforeEnter: (to, from, next) => {
         if (!isAuthenticated()) {
-          next('/');  // Redirige vers login si l'utilisateur n'est pas authentifié
+          next('/Login');  // Redirige vers login si l'utilisateur n'est pas authentifié
           alert("Vous n'êtes pas authentifié !")
         } else {
           next();  // Laisse passer si authentifié
         }
       }
     },
+    {
+      path: '/panelLudotheque',
+      component: panelLudo,
+      beforeEnter: (to, from, next) => {
+        if(isAuthenticated()){
+          if(JSON.parse(retrieveRole()).Role === 2){
+            next();
+          }else{
+            next('/catalogue');
+            alert("Vous n'êtes pas authorizé à accéder à cette page.")
+          }
+        }else{
+          next('/Login');
+          alert("Vous n'êtes pas authentifié !")
+        }
+      }
+    }
   ],
 })
 

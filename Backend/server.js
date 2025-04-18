@@ -41,6 +41,8 @@ app.use('/users', userRoutes);
 const jeuRoutes = require('./routes/jeux');
 app.use('/catalogue', jeuRoutes);
 
+const ludoRoutes = require('./routes/ludotheque');
+app.use('/ludotheque', ludoRoutes);
 
 app.get("/")
 
