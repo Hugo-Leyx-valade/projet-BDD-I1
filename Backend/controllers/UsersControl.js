@@ -35,12 +35,17 @@ exports.registerUser = (req, res) => {
     // Insérer l'utilisateur dans la base de données
     db.query('INSERT INTO Users (Pseudo, Email, Password, idDepartement) VALUES (?, ?, ?, ?)', [pseudo, email, hash, idDepartement], (err, results) => {
       if (err) {
-        return res.status(500).json({ error: 'Erreur lors de l\'inscription de l\'utilisateur' });
+        return res.status(500).json({ error: 'tié fada' });
       }
-      res.status(201).json({ message: 'Utilisateur enregistré avec succès', userId: results.insertId });
+      db.query('SELECT * FROM Users WHERE Email like(?)', [email], (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: 'tié fou' });
+        }else{
+          res.status(200).json({ message: 'Inscription réussie', user: results[0] });
+        }
     });
-  });
-};
+  })
+  });};
 
 exports.loginUser = (req, res) => {
   const { email, password } = req.body;
