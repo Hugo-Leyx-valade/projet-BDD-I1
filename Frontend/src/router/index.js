@@ -5,6 +5,8 @@ import ludoConnect from '../views/ludoConnect.vue'
 import catalogue from '@/components/catalogue.vue'
 import jeu from '@/components/jeu.vue'
 import panelLudo from '@/components/panelLudotheque.vue'
+import about from '@/components/about.vue'
+import contact from '@/components/contact.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -21,6 +23,16 @@ const router = createRouter({
       path: '/ludoGate',
       name:'ludoGate',
       component:ludoConnect,
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component:contact, 
+    },
+    {
+      path: '/about', 
+      name: 'about',
+      component:about,
     },
     {
       path: '/catalogue',
