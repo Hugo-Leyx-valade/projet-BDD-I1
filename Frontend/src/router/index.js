@@ -1,13 +1,13 @@
 import { isAuthenticated, retrieveRole } from '../auth';
-import { createRouter, createWebHistory } from 'vue-router'
-import userConnect from '../views/userConnect.vue'
-import ludoConnect from '../views/ludoConnect.vue'
-import catalogue from '@/components/catalogue.vue'
-import jeu from '@/components/jeu.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import userConnect from '../views/userConnect.vue';
+import ludoConnect from '../views/ludoConnect.vue';
+import catalogue from '@/components/catalogue.vue';
+import jeu from '@/components/jeu.vue';
 import panelLudo from '@/components/panelLudotheque.vue'
 import ludotheques from '@/components/ludotheques.vue';
-
-import about from '@/components/about.vue'
+import reservation from '@/components/reservation.vue';
+import about from '@/components/about.vue';
 import contact from '@/components/contact.vue';
 
 const router = createRouter({
@@ -65,6 +65,20 @@ const router = createRouter({
       name:'jeu',
       props:true,
       component: jeu,
+      beforeEnter: (to, from, next) => {
+        if (!isAuthenticated()) {
+          next('/Login');  // Redirige vers login si l'utilisateur n'est pas authentifié
+          alert("Vous n'êtes pas authentifié !")
+        } else {
+          next();  // Laisse passer si authentifié
+        }
+      }
+    },
+    {
+      path: '/reservation',
+      name:'reservation',
+      props:true,
+      component: reservation,
       beforeEnter: (to, from, next) => {
         if (!isAuthenticated()) {
           next('/Login');  // Redirige vers login si l'utilisateur n'est pas authentifié

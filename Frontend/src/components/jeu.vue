@@ -18,7 +18,7 @@
         <div class="stores-container">
           <h3>En stock à </h3>
           <ul class="stores-list">
-            <li v-for="store in activeLudo" :key="store.Name" > •  {{ store.Name }} ({{ store.idDepartement }}) - encore {{ store.Stock }} en stock ! <button id="reserve">réserver !</button></li>
+            <li v-for="store in activeLudo" :key="store.Name" > •  {{ store.Name }} ({{ store.idDepartement }}) - encore {{ store.Stock }} en stock ! <button id="reserve" :data-ludotheque-id="store.idLudotheque">Réserver !</button></li>
           </ul>
         </div>
       </div>
@@ -27,6 +27,7 @@
   <script>
   import axios from 'axios';
   import Navbar from './navbar.vue';
+import router from '@/router';
   
   export default {
     name: 'GameDetails',
@@ -36,6 +37,12 @@
         user: JSON.parse(localStorage.getItem('entity')) || {},  // Récupère les données utilisateur depuis localStorage
         isLoading: true, // par défaut à true
       };
+    },
+    props: {
+      gameId: {
+        type: Number,
+        required: true,
+      },
     },
     components: {
       Navbar,
@@ -52,6 +59,7 @@
     .finally(() => {
       this.isLoading = false;
     });
+    document.addEventListener('click', this.handleReserveClick);
   },
     computed: {
     activeLudo() {
@@ -64,19 +72,20 @@
       return [];  // Si pas de magasins ou pas de données
     },
   },
-  };
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const reserveButton = document.getElementById('reserve');
-    if (reserveButton) {
-      reserveButton.addEventListener('click', function() {
-        axios.post('http://localhost:3000/reserve', {
-          idJeu: this.game[0].id,
-          idLudo: this.user.idDepartement,
-        })
-      });
-    }
-  });
+  methods:{
+    handleReserveClick(event) {
+      const reserveButton = event.target.closest('#reserve');
+      if (reserveButton) {
+        const gameId = this.$route.params.id; // ID du jeu
+        const ludothequeId = reserveButton.getAttribute('data-ludotheque-id'); // ID de la ludothèque
+        this.$router.push({
+          path: `/reservation`,
+          query: { idJeu: gameId, idLudotheque: ludothequeId },
+        });
+      }
+    },
+  },
+  }
 
   </script>
   
