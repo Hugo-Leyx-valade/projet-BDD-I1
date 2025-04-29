@@ -22,3 +22,16 @@ exports.getJeuById = (req, res) => {
     res.json(results);
   });
 };
+
+exports.reserveJeu = (req, res) => {
+  const userId = req.params.id;
+  db.query('', [userId], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erreur MySQL' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Jeu non trouvé' });
+    }
+    res.json(results);
+  });
+}

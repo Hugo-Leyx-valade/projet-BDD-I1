@@ -18,7 +18,7 @@
         <div class="stores-container">
           <h3>En stock à </h3>
           <ul class="stores-list">
-            <li v-for="store in activeLudo" :key="store.Name" > •  {{ store.Name }} ({{ store.idDepartement }}) - encore {{ store.Stock }} en stock !</li>
+            <li v-for="store in activeLudo" :key="store.Name" > •  {{ store.Name }} ({{ store.idDepartement }}) - encore {{ store.Stock }} en stock ! <button id="reserve">réserver !</button></li>
           </ul>
         </div>
       </div>
@@ -55,14 +55,29 @@
   },
     computed: {
     activeLudo() {
+        console.log("test");
+        console.log(this.game);
         if (this.game && Array.isArray(this.game)) {
-          console.log(this.game);
+          console.log(this.game.filter(game => game.idDepartement === this.user.idDepartement));
           return this.game.filter(game => game.idDepartement === this.user.idDepartement);
         }
       return [];  // Si pas de magasins ou pas de données
     },
   },
   };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const reserveButton = document.getElementById('reserve');
+    if (reserveButton) {
+      reserveButton.addEventListener('click', function() {
+        axios.post('http://localhost:3000/reserve', {
+          idJeu: this.game[0].id,
+          idLudo: this.user.idDepartement,
+        })
+      });
+    }
+  });
+
   </script>
   
   <style scoped>

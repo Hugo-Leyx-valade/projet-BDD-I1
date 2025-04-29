@@ -62,7 +62,7 @@ export default {
           pseudo: this.pseudo,
           email: this.email,
           password: this.password,
-          departement:this.departement
+          idDepartement:this.departement
         })
       })
       .then(response => response.json())
