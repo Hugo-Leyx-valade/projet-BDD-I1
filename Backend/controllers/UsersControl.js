@@ -25,7 +25,7 @@ exports.getUserById = (req, res) => {
 
 exports.registerUser = (req, res) => {
   const { pseudo, email, password, idDepartement } = req.body;
-
+  console.log(idDepartement);
   // Hacher le mot de passe
   bcrypt.hash(password, 10, (err, hash) => {
     if (err) {

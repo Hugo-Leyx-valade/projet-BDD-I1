@@ -18,7 +18,7 @@
         <div class="stores-container">
           <h3>En stock à </h3>
           <ul class="stores-list">
-            <li v-for="store in activeLudo" :key="store.Name" > •  {{ store.Name }} ({{ store.idDepartement }}) - encore {{ store.Stock }} en stock !</li>
+            <li v-for="store in activeLudo" :key="store.Name" > •  {{ store.Name }} ({{ store.idDepartement }}) - encore {{ store.Stock }} en stock ! <button id="reserve" :data-ludotheque-id="store.idLudotheque">Réserver !</button></li>
           </ul>
         </div>
       </div>
@@ -27,6 +27,7 @@
   <script>
   import axios from 'axios';
   import Navbar from './navbar.vue';
+import router from '@/router';
   
   export default {
     name: 'GameDetails',
@@ -36,6 +37,12 @@
         user: JSON.parse(localStorage.getItem('entity')) || {},  // Récupère les données utilisateur depuis localStorage
         isLoading: true, // par défaut à true
       };
+    },
+    props: {
+      gameId: {
+        type: Number,
+        required: true,
+      },
     },
     components: {
       Navbar,
@@ -52,17 +59,34 @@
     .finally(() => {
       this.isLoading = false;
     });
+    document.addEventListener('click', this.handleReserveClick);
   },
     computed: {
     activeLudo() {
+        console.log("test");
+        console.log(this.game);
         if (this.game && Array.isArray(this.game)) {
-          console.log(this.game);
+          console.log(this.game.filter(game => game.idDepartement === this.user.idDepartement));
           return this.game.filter(game => game.idDepartement === this.user.idDepartement);
         }
       return [];  // Si pas de magasins ou pas de données
     },
   },
-  };
+  methods:{
+    handleReserveClick(event) {
+      const reserveButton = event.target.closest('#reserve');
+      if (reserveButton) {
+        const gameId = this.$route.params.id; // ID du jeu
+        const ludothequeId = reserveButton.getAttribute('data-ludotheque-id'); // ID de la ludothèque
+        this.$router.push({
+          path: `/reservation`,
+          query: { idJeu: gameId, idLudotheque: ludothequeId },
+        });
+      }
+    },
+  },
+  }
+
   </script>
   
   <style scoped>
