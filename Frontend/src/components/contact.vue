@@ -3,12 +3,6 @@
     <div class="contact-container">
         <h2 class="title">📞 Contact</h2>
         <p class="subtitle">N'hésitez pas à nous contacter via le formulaire ci-dessous ou par nos coordonnées.</p>
-    
-        <div class="contact-info">
-            <p>📧 Email : contact@ludohub.com</p>
-            <p>📍 Adresse : 123 Avenue Yvan Guifo, 75008 Paris</p>
-            <p>📱 Téléphone : +33 1 23 45 67 89</p>
-        </div>
 
         <form class="contact-form">
             <input type="text" placeholder="Votre nom" required />
@@ -16,6 +10,13 @@
             <textarea placeholder="Votre message" rows="5" required></textarea>
             <button type="submit">Envoyer</button>
         </form>
+
+        <div class="contact-info">
+            <br>
+            <p>📧 Email : contact@ludohub.com</p>
+            <p>📍 Adresse : 123 Avenue Yvan Guifo, 75008 Paris</p>
+            <p>📱 Téléphone : +33 1 23 45 67 89</p>
+        </div>
     </div>
 </template>
 
