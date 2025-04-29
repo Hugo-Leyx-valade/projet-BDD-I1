@@ -84,3 +84,16 @@ exports.loginLudo = async (req, res) => {
     })
     });
   };
+
+  exports.allLudo = (req, res) => {
+    db.query('SELECT * FROM Ludotheque', (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: 'Erreur lors de la connexion à la base de données' });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Aucune ludothèque trouvée' });
+      }
+      res.status(200).json(results);
+    });
+  };
+  
