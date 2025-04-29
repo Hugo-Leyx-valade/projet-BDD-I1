@@ -2,6 +2,7 @@
   <nav class="navbar">
     <ul>
       <li><router-link to="/catalogue">Accueil</router-link></li>
+      <li><router-link to="/ludotheques">Ludotheques</router-link></li>
       <li><router-link to="/about">À propos</router-link></li>
       <li><router-link to="/contact">Contact</router-link></li>
     </ul>

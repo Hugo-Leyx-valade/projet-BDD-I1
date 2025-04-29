@@ -2,7 +2,7 @@
   <div id="app">
     <!-- Barre latérale (au-dessus de la navbar) -->
     <header class="sidebar">
-      <h1 class="app-name">Nom de l'Application</h1>
+      <h1 class="app-name">Ludo Hub</h1>
     </header>
 
     <!-- Navbar -->
