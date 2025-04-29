@@ -2,10 +2,20 @@
     <Navbar/>
     <div class="contact-container">
         <h2 class="title">📞 Contact</h2>
-        <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et erat vitae enim tincidunt tincidunt. Integer nec malesuada erat. In at sapien vel justo sollicitudin scelerisque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-Vivamus laoreet, elit nec varius porttitor, nulla nunc dapibus erat, in cursus nulla odio id magna. Sed ac efficitur sapien, vitae posuere nunc. Curabitur imperdiet lorem eu turpis tincidunt, vel porta neque hendrerit.
-Maecenas nec sagittis ex. Vestibulum non ultrices tortor. Morbi in urna vel sem porttitor dignissim a in justo. Praesent pulvinar nibh id ante tincidunt, at dapibus neque tincidunt.
-        </p>
+        <p class="subtitle">N'hésitez pas à nous contacter via le formulaire ci-dessous ou par nos coordonnées.</p>
+    
+        <div class="contact-info">
+            <p>📧 Email : contact@ludohub.com</p>
+            <p>📍 Adresse : 123 Avenue Yvan Guifo, 75008 Paris</p>
+            <p>📱 Téléphone : +33 1 23 45 67 89</p>
+        </div>
+
+        <form class="contact-form">
+            <input type="text" placeholder="Votre nom" required />
+            <input type="email" placeholder="Votre email" required />
+            <textarea placeholder="Votre message" rows="5" required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
     </div>
 </template>
 
@@ -13,7 +23,7 @@ Maecenas nec sagittis ex. Vestibulum non ultrices tortor. Morbi in urna vel sem 
 import Navbar from './navbar.vue'
 
 export default {
-    name: 'A propos',
+    name: 'Contact',
     components: {
         Navbar,
     },
@@ -33,5 +43,49 @@ export default {
   color: #3f2d2d;
   margin-bottom: 2rem;
   font-size: 3rem;
+}
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.contact-info {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.contact-form button {
+  background-color: #00a2ff;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #007acc;
 }
 </style>
