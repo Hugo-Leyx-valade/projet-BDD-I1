@@ -33,7 +33,7 @@
     data() {
       return {
         game: {},
-        user: JSON.parse(localStorage.getItem('user')) || {},  // Récupère les données utilisateur depuis localStorage
+        user: JSON.parse(localStorage.getItem('entity')) || {},  // Récupère les données utilisateur depuis localStorage
         isLoading: true, // par défaut à true
       };
     },

@@ -28,6 +28,7 @@
       <button type="submit">{{ isLogin ? 'Se connecter' : 'S\'inscrire' }}</button>
     </form>
     <button @click="toggleForm">{{ isLogin ? 'Pas encore inscrit ?' : 'Déjà inscrit ?' }}</button>
+    <router-link to="/ludoGate">Vous êtes une ludothèque ? Alors c'est pas ici</router-link>
   </div>
 </template>
 
@@ -73,7 +74,7 @@ export default {
           console.log('Succès :', data.message);
           const token = data.token;
           loginUser(token);
-          localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('entity', JSON.stringify(data.user));
           window.location.href = "/catalogue";
         }
       })
