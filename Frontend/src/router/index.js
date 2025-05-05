@@ -9,6 +9,7 @@ import ludotheques from '@/components/ludotheques.vue';
 import reservation from '@/components/reservation.vue';
 import about from '@/components/about.vue';
 import contact from '@/components/contact.vue';
+import profil from '@/components/profil.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,11 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/Login'
+    },
+    {
+      path: '/profil',
+      name: 'profil',
+      component: profil, 
     },
     {
       path: '/Login',
