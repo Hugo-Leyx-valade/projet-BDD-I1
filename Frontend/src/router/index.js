@@ -3,10 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import userConnect from '../views/userConnect.vue'
 import ludoConnect from '../views/ludoConnect.vue'
 import catalogue from '@/components/catalogue.vue'
-import jeu from '@/components/jeu.vue'
+import jeu from '@/components/profil.vue'
 import panelLudo from '@/components/panelLudotheque.vue'
 import about from '@/components/about.vue'
-import contact from '@/components/contact.vue';
+import contact from '@/components/contact.vue'
+import profil from '@/components/profil.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -18,6 +19,11 @@ const router = createRouter({
       path: '/Login',
       name: 'home',
       component: userConnect,
+    },
+    {
+      path: '/profil',
+      name: 'profil',
+      component: profil, 
     },
     {
       path: '/ludoGate',
