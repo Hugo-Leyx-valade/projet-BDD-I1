@@ -1,0 +1,20 @@
+{
+  "name": "projet-bdd-i1",
+  "version": "1.0.0",
+  "description": "**Authors:**  \r Victor Dallon · Hugo Leyx-Valade · Léopold Billecocq · Steeve",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hugo-Leyx-valade/projet-BDD-I1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hugo-Leyx-valade/projet-BDD-I1/issues"
+  },
+  "homepage": "https://github.com/Hugo-Leyx-valade/projet-BDD-I1#readme"
+}
