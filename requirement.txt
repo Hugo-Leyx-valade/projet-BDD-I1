@@ -1,1 +1,13 @@
 express
+# Equivalent Python dependencies for the JavaScript project
+popperjs-core==2.11.8  # No direct equivalent, placeholder
+axios==1.8.4          # No direct equivalent, placeholder
+v-calendar==3.1.2     # No direct equivalent, placeholder
+vue==3.5.13           # No direct equivalent, placeholder
+vue-datepicker-next==1.0.3  # No direct equivalent, placeholder
+vue-router==4.5.0     # No direct equivalent, placeholder
+
+# Dev dependencies (if needed for tooling)
+eslint==9.22.0        # No direct equivalent, placeholder
+prettier==3.5.3       # No direct equivalent, placeholder
+vite==6.2.4           # No direct equivalent, placeholder

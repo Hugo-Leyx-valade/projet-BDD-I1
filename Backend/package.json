@@ -15,8 +15,12 @@
     "compression": "^1.8.0",
     "const": "^1.0.0",
     "cors": "^2.8.5",
+    "crontab": "^1.4.2",
     "express": "^5.1.0",
+    "install": "^0.13.0",
     "mysql2": "^3.14.0",
+    "node-cron": "^3.0.3",
+    "npm": "^11.3.0",
     "vue-router": "^4.5.0"
   }
 }
