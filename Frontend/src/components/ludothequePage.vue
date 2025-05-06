@@ -8,7 +8,7 @@
         </div>
       </div>
       <div id="createEvent" v-if="(user.Role === 2) && (parseInt(this.user.idUser) === parseInt(this.idLudotheque))">
-            <button @click="console.log('triks')">Réserver un jeu</button>
+            <button @click="goToEventCreation(this.idLudotheque)">Réserver un jeu</button>
         </div>
     </div>
   </template>
@@ -40,7 +40,12 @@
         .catch(error => {
           console.error('Erreur lors du chargement des informations de la ludothèque', error);
         });
+    },
+    methods: {
+    goToEventCreation(id) {
+      this.$router.push(`/EventCreation/${id}`);
     }
+  }
   };
   </script>
   

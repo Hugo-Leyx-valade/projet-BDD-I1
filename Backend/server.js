@@ -44,5 +44,8 @@ app.use('/catalogue', jeuRoutes);
 const ludoRoutes = require('./routes/ludotheque');
 app.use('/ludotheque', ludoRoutes);
 
+const eventRoutes = require('./routes/Event');
+app.use('/Event', eventRoutes);
+
 app.get("/")
 

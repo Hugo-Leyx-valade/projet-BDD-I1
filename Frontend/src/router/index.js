@@ -10,6 +10,7 @@ import reservation from '@/components/reservation.vue';
 import about from '@/components/about.vue';
 import contact from '@/components/contact.vue';
 import ludothequePage from '@/components/ludothequePage.vue';
+import EventCreation from '@/components/EventCreation.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +27,12 @@ const router = createRouter({
       path: '/ludoGate',
       name:'ludoGate',
       component:ludoConnect,
+    },
+    {
+      path: '/EventCreation/:id',
+      props:true,
+      name:'EventCreation',
+      component:EventCreation,
     },
     {
       path: '/ludotheques',
