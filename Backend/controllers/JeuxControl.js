@@ -39,44 +39,59 @@ exports.allReservationFaraGame = (req, res) => {
 }
 
 exports.reserveJeu = (req, res) => {
-  const { borrowDate, returnDate, idUser, idJeu, idLudotheque } = req.body;
-  console.log(req.body);
-  // Vérification des chevauchements de dates
+  const { borrowDate, returnDate, userId, idJeu, idLudotheque } = req.body;
+
+  console.log("Données reçues :", req.body);
+
+  // Vérification des chevauchements de dates et du stock
+  const checkAvailabilitySql = `
+    SELECT COUNT(*) AS totalReservations, Stock.Stock AS stockTotal
+    FROM Loue
+    JOIN Stock ON Loue.Jeu_id = Stock.idJeu
+    WHERE Stock.idLudotheque = ?
+      AND Stock.idJeu = ?
+      AND (
+        (dateDepart <= ? AND dateRetour >= ?) OR
+        (dateDepart <= ? AND dateRetour >= ?) OR
+        (dateDepart >= ? AND dateRetour <= ?)
+      )
+    GROUP BY Stock.Stock;
+  `;
+
   db.query(
-    `SELECT COUNT(*) AS totalReservations, Stock.Stock
-     FROM Loue
-     JOIN Stock ON Loue.Jeu_id = Stock.idJeu
-     WHERE Stock.idLudotheque = ?
-       AND Stock.idJeu = ?
-       AND (
-         (dateDepart <= ? AND dateRetour >= ?) OR
-         (dateDepart <= ? AND dateRetour >= ?) OR
-         (dateDepart >= ? AND dateRetour <= ?)
-       )
-     GROUP BY Stock.stockTotal`,
+    checkAvailabilitySql,
     [idLudotheque, idJeu, borrowDate, borrowDate, returnDate, returnDate, borrowDate, returnDate],
     (err, results) => {
       if (err) {
+        console.error("Erreur MySQL lors de la vérification des dates et du stock :", err);
         return res.status(500).json({ error: 'Erreur MySQL lors de la vérification des dates et du stock' });
       }
-  
+
       // Vérifiez si le stock est épuisé
       if (results.length > 0 && results[0].totalReservations >= results[0].stockTotal) {
-        return res.status(400).json({ error: 2 }); // Stock épuisé
+        console.log("Stock épuisé pour ce jeu à cette période.");
+        return res.status(400).json({ error: 'Stock épuisé pour cette période' });
       }
-  
+
       // Si le stock est disponible, insérer la réservation
+      const insertReservationSql = `
+        INSERT INTO Loue (dateDepart, dateRetour, User_idUser, Jeu_id)
+        VALUES (?, ?, ?, ?);
+      `;
+      console.log("je suis la pour la data",userId,idJeu);
       db.query(
-        `INSERT INTO Loue (dateDepart, dateRetour, User_idUser, Jeu_id)
-         VALUES (?, ?, ?, ?)`,
-        [borrowDate, returnDate, idUser, idJeu],
+        insertReservationSql,
+        [borrowDate, returnDate, userId, idJeu],
         (err, results) => {
           if (err) {
+            console.error("Erreur MySQL lors de l'insertion de la réservation :", err);
             return res.status(500).json({ error: 'Erreur MySQL lors de l\'insertion de la réservation' });
           }
+
+          console.log("Réservation réussie :", results);
           res.json({ message: 'Réservation réussie' });
         }
       );
     }
   );
-}
+};
