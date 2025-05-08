@@ -33,7 +33,7 @@ exports.registerUser = (req, res) => {
     }
 
     // Insérer l'utilisateur dans la base de données
-    db.query('INSERT INTO Users (Pseudo, Email, Password, idDepartement) VALUES (?, ?, ?, ?)', [pseudo, email, hash, idDepartement], (err, results) => {
+    db.query('INSERT INTO Users (Pseudo, Email, Password, idDepartement, Role) VALUES (?, ?, ?, ?, 3)', [pseudo, email, hash, idDepartement], (err, results) => {
       if (err) {
         return res.status(500).json({ error: 'tié fada' });
       }

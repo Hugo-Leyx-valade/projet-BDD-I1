@@ -1,7 +1,7 @@
 <template>
     <div class="event-creation-container">
       <h2>Créer un Événement</h2>
-      <form @submit.prevent="submitEvent">
+      <form @submit.prevent="submitEvent" @submit="goToLudotheque(this.$route.params.id)">
         <div class="form-group">
           <label for="eventName">Nom de l'Événement :</label>
           <input
@@ -73,6 +73,10 @@
       };
     },
     methods: {
+      goToLudotheque(id) {
+      this.$router.push(`/ludothequesPage/${id}`);
+    },
+
       fetchGames() {
         // Récupère la liste des jeux disponibles
         axios
@@ -95,9 +99,10 @@
           maxParticipants: this.maxParticipants,
           date: this.eventDate,
           ludothequeId: this.$route.params.id, // ID de la ludothèque
-          gameId: this.selectedGame.id,
+          gameId: this.selectedGame,
         };
-  
+        
+        console.log("Données de l'événement :", eventData, this.selectedGame);
         axios
           .post("http://localhost:3000/Event/create", eventData) // Remplacez par l'URL de votre API
           .then(() => {
