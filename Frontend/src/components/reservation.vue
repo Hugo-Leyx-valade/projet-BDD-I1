@@ -8,12 +8,13 @@
             <label for="dateRange">Sélectionnez une période :</label>
             <date-picker
                 v-model:value="selectedDate"
-                :disabled-date="isDateDisabled"
+                :disabled-date="isDateDisabled"a
                 range
                 type="daterange"
                 :format="'YYYY-MM-DD'"
                 :placeholder="['Date d\'emprunt', 'Date de retour']"
                 @change="handleDateChange"
+                calendar-class="rounded"
             ></date-picker>
           </div>
           <button type="submit" :disabled="!isFormValid || isLoading">
@@ -79,34 +80,40 @@
         this.errorMessage = "La date sélectionnée est invalide. Veuillez choisir une autre date.";
       }
     },
-        isDateDisabled(date) {
-      const formattedDate = date.toISOString().split('T')[0];
-      // Vérifie si la date est dans l'une des plages désactivées
-      const isInDisabledRange = this.reservations.some(range => {
-        console.log("Date formatée :", range.dateDepart, range.dateRetour);
-        return formattedDate >= range.dateDepart && formattedDate <= range.dateRetour;
-      });
-      console.log(`Date ${formattedDate} désactivée :`, isInDisabledRange);
-      return isInDisabledRange;
-    },
-      fetchReservations() {
-        this.isLoading = true;
-        axios
-          .get(
-            `http://localhost:3000/catalogue/${this.idJeu}/${this.idLudotheque}/reservation`
-          )
-          .then((response) => {
-            this.reservations = response.data;
-            console.log("Réservations chargées :", this.reservations);
-          })
-          .catch((error) => {
-            console.error("Erreur lors du chargement des réservations", error);
-            this.errorMessage = "Erreur lors du chargement des réservations.";
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
+    isDateDisabled(date) {
+        const formattedDate = date.toISOString().split('T')[0];
+        
+        // Vérifie si la date est dans les réservations et si le stock est épuisé
+        const reservationInfo = this.reservations.find(reservation => reservation.date === formattedDate);
+        
+        if (reservationInfo) {
+          const isStockDepleted = reservationInfo.reservations >= reservationInfo.stockTotal;
+          if (isStockDepleted) {
+            console.log(`Date ${formattedDate} désactivée : stock épuisé`);
+            return true; // Désactive la date si le stock est épuisé
+          }
+        }
+        
+        return false; // Sinon, la date est disponible
       },
+      fetchReservations() {
+  this.isLoading = true;
+  axios
+    .get(
+      `http://localhost:3000/catalogue/${this.idJeu}/${this.idLudotheque}/reservation`
+    )
+    .then((response) => {
+      this.reservations = response.data; // Stocke les données de réservation
+      console.log("Réservations chargées :", this.reservations);
+    })
+    .catch((error) => {
+      console.error("Erreur lors du chargement des réservations", error);
+      this.errorMessage = "Erreur lors du chargement des réservations.";
+    })
+    .finally(() => {
+      this.isLoading = false;
+    });
+},
 
       formatDate(date) {
         return new Date(date).toISOString().split("T")[0];
@@ -150,10 +157,60 @@
   };
   </script>
   
-  <style scoped>
+  <style>
   .error-message {
     color: red;
   }
-  /* Ajoutez vos styles ici */
-  </style>
+
+  h2 {
+    text-align: center;
+    color: #1af806;
+    font-weight: bolder;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+  }
+  label {
+    font-size: 1.2rem;
+    color: #504329;
+  }
   
+  .mx-input {
+  width: 100%; /* S'assurer qu'il prend toute la largeur disponible */
+  padding: 10px; /* Ajouter un espacement interne */
+  border: 1px solid #ccc; /* Bordure grise */
+  border-radius: 100px; /* Coins arrondis */
+  font-size: 1rem; /* Taille du texte */
+  color: #333; /* Couleur du texte */
+  background-color: #f9f9f9; /* Couleur de fond */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajouter une ombre subtile */
+  margin-left: 5% ;
+}
+
+.mx-input:focus {
+  outline: none; /* Supprimer le contour par défaut */
+  border-color: #007bff; /* Changer la couleur de la bordure au focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajouter une ombre bleue au focus */
+}
+
+  </style>
+
+  <style scoped>
+  button {
+  background-color: #1af806;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-content: center;
+}
+
+h3, ul {
+  text-align: center; 
+  color: #3f2d2d;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+</style>

@@ -24,18 +24,6 @@ exports.getJeuById = (req, res) => {
   });
 };
 
-exports.reserveJeu = (req, res) => {
-  const userId = req.params.id;
-  db.query('', [userId], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Erreur MySQL' });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Jeu non trouvé' });
-    }
-    res.json(results);
-  });
-}
 
 exports.allReservationFaraGame = (req, res) => {
   const idJeu = req.params.idJeu;
@@ -55,27 +43,31 @@ exports.reserveJeu = (req, res) => {
   console.log(req.body);
   // Vérification des chevauchements de dates
   db.query(
-    `select * from Loue Join Jeu on Loue.Jeu_id = Jeu.id 
-    Join Stock on Stock.idJeu= Jeu.id where Stock.idLudotheque = ? 
-    AND Stock.idJeu = ? 
-     AND (
-       (dateDepart <= ? AND dateRetour >= ?) OR
-       (dateDepart <= ? AND dateRetour >= ?) OR
-       (dateDepart >= ? AND dateRetour <= ?)
-     )`,
-    [idLudotheque,idJeu, borrowDate, borrowDate, returnDate, returnDate, borrowDate, returnDate],
+    `SELECT COUNT(*) AS totalReservations, Stock.Stock
+     FROM Loue
+     JOIN Stock ON Loue.Jeu_id = Stock.idJeu
+     WHERE Stock.idLudotheque = ?
+       AND Stock.idJeu = ?
+       AND (
+         (dateDepart <= ? AND dateRetour >= ?) OR
+         (dateDepart <= ? AND dateRetour >= ?) OR
+         (dateDepart >= ? AND dateRetour <= ?)
+       )
+     GROUP BY Stock.stockTotal`,
+    [idLudotheque, idJeu, borrowDate, borrowDate, returnDate, returnDate, borrowDate, returnDate],
     (err, results) => {
       if (err) {
-        return res.status(500).json({ error: 'Erreur MySQL lors de la vérification des dates' });
+        return res.status(500).json({ error: 'Erreur MySQL lors de la vérification des dates et du stock' });
       }
-
-      if (results.length > 0) {
-        return res.status(400).json({ error: 2});
+  
+      // Vérifiez si le stock est épuisé
+      if (results.length > 0 && results[0].totalReservations >= results[0].stockTotal) {
+        return res.status(400).json({ error: 2 }); // Stock épuisé
       }
-
-      // Si aucune réservation ne chevauche, insérer la nouvelle réservation
+  
+      // Si le stock est disponible, insérer la réservation
       db.query(
-        `INSERT INTO Loue (dateDepart, dateRetour, User_idUser, Jeu_id) 
+        `INSERT INTO Loue (dateDepart, dateRetour, User_idUser, Jeu_id)
          VALUES (?, ?, ?, ?)`,
         [borrowDate, returnDate, idUser, idJeu],
         (err, results) => {
@@ -87,4 +79,4 @@ exports.reserveJeu = (req, res) => {
       );
     }
   );
-};
+}

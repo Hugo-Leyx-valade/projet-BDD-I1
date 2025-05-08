@@ -86,7 +86,7 @@ exports.loginLudo = async (req, res) => {
   };
 
   exports.allLudo = (req, res) => {
-    db.query('SELECT * FROM Ludotheque', (err, results) => {
+    db.query('Select * from Ludotheque join Users on idLudotheque = idUser; ', (err, results) => {
       if (err) {
         return res.status(500).json({ error: 'Erreur lors de la connexion à la base de données' });
       }
@@ -97,3 +97,15 @@ exports.loginLudo = async (req, res) => {
     });
   };
   
+  exports.getLudoById = (req, res) => {
+    const userId = req.params.id;
+    db.query('SELECT idLudotheque, Name, idDepartement FROM Ludotheque join Users on idLudotheque = Users.idUser where idLudotheque = ?; ', [userId], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: 'Erreur lors de la connexion à la base de données' });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Ludothèque non trouvée' });
+      }
+      res.status(200).json(results[0]);
+    });
+  }
