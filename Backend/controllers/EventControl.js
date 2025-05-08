@@ -60,18 +60,38 @@ exports.getAllParticipants = (req, res) => {
     }
 
 exports.postParticipation = (req, res) => {
-    const { idEvenement, idUser} = req.body;
-    // Requête SQL avec des paramètres préparés
-    const sql = `
-        INSERT INTO Participe (idUser, idEvenement)
-        VALUES (?, ?);
+    const { idEvenement, idUser } = req.body;
+
+    // Vérifie si l'utilisateur est déjà inscrit à cet événement
+    const checkSql = `
+        SELECT * FROM Participe
+        WHERE idUser = ? AND idEvenement = ?;
     `;
 
-    db.query(sql, [idUser, idEvenement], (err, results) => {
+    db.query(checkSql, [idUser, idEvenement], (err, results) => {
         if (err) {
-            console.error("Erreur MySQL :", err);
-            return res.status(500).json({ error: 'Erreur MySQL' });
+            console.error("Erreur MySQL lors de la vérification :", err);
+            return res.status(500).json({ error: 'Erreur MySQL lors de la vérification' });
         }
-        res.json({ message: 'Participation ajoutée avec succès', results });
+
+        if (results.length > 0) {
+            // L'utilisateur est déjà inscrit
+            return res.status(400).json({ error: 'Utilisateur déjà inscrit à cet événement' });
+        }
+
+        // Si l'utilisateur n'est pas inscrit, insérez la participation
+        const insertSql = `
+            INSERT INTO Participe (idUser, idEvenement)
+            VALUES (?, ?);
+        `;
+
+        db.query(insertSql, [idUser, idEvenement], (err, results) => {
+            if (err) {
+                console.error("Erreur MySQL lors de l'insertion :", err);
+                return res.status(500).json({ error: 'Erreur MySQL lors de l\'insertion' });
+            }
+
+            res.json({ message: 'Participation ajoutée avec succès', results });
+        });
     });
-}
+};

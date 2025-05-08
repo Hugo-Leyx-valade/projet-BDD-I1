@@ -66,8 +66,8 @@ export default {
       this.fetchEvents(this.idLudotheque);
     }
   },
-  events(newEvents) {
-    if (newEvents.length > 0) {
+  participants(newParticipants) {
+    if (newParticipants.length > 0) {
       this.alreadyParticiped = this.generateAlreadyParticipedArray(this.user.idUser);
       console.log("alreadyParticiped mis à jour :", this.alreadyParticiped);
     }
@@ -96,10 +96,10 @@ export default {
     generateAlreadyParticipedArray(idUser) {
       const alreadyParticiped = [];
       console.log("ID de l'utilisateur :", idUser);
-      console.log("Tableau des événements :", this.events);
-      for (let i = 0; i < this.events.length; i++) {
-        if (this.events[i].idUser === idUser) {
-          alreadyParticiped.push(this.events[i].idEvenement);
+      console.log("Tableau des participants dans la fonctions :", this.participants);
+      for (let i = 0; i < this.participants.length; i++) {
+        if (this.participants[i].idUser === idUser) {
+          alreadyParticiped.push(this.participants[i].idEvenement);
         }
       }
       console.log("Array des participations déjà existantes :", alreadyParticiped);
@@ -123,6 +123,7 @@ export default {
         })
         .catch((error) => {
           console.error("Erreur lors de la participation :", error);
+          alert(error.response.data.error);
         });
     },
     numberOfParticipant(participants, idEvent) {
