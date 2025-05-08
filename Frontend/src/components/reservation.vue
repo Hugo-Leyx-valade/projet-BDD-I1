@@ -7,15 +7,15 @@
           <div class="form-group">
             <label for="dateRange">Sélectionnez une période :</label>
             <date-picker
-                v-model:value="selectedDate"
-                :disabled-date="isDateDisabled"a
-                range
-                type="daterange"
-                :format="'YYYY-MM-DD'"
-                :placeholder="['Date d\'emprunt', 'Date de retour']"
-                @change="handleDateChange"
-                calendar-class="rounded"
-            ></date-picker>
+              v-model:value="selectedDate"
+              :disabled-date="isDateDisabled"
+              range
+              type="daterange"
+              :format="'YYYY-MM-DD'"
+              :placeholder="['Date d\'emprunt', 'Date de retour']"
+              @change="handleDateChange"
+              calendar-class="rounded"
+            />
           </div>
           <button type="submit" :disabled="!isFormValid || isLoading">
             {{ isLoading ? 'Réservation en cours...' : 'Réserver' }}
@@ -26,7 +26,8 @@
           <h3>Dates déjà réservées :</h3>
           <ul>
             <li v-for="reservation in reservations" :key="reservation.idLocation">
-              Du {{ formatDate(reservation.dateDepart) }} au {{ formatDate(reservation.dateRetour) }}
+              Du {{ new Date(new Date(reservation.dateDepart).setDate(new Date(reservation.dateDepart).getDate() + 1)).toISOString().split('T')[0] }}
+              au {{ new Date(new Date(reservation.dateRetour).setDate(new Date(reservation.dateRetour).getDate() + 1)).toISOString().split('T')[0] }}
             </li>
           </ul>
         </div>
@@ -55,8 +56,7 @@
         idLudotheque: null,
         isLoading: false,
         errorMessage: "",
-        disabledRanges: [
-      ]
+        disabledRanges: [],
       };
     },
     computed: {
@@ -81,22 +81,57 @@
       }
     },
     isDateDisabled(date) {
-        const formattedDate = date.toISOString().split('T')[0];
-        
-        // Vérifie si la date est dans les réservations et si le stock est épuisé
-        const reservationInfo = this.reservations.find(reservation => reservation.date === formattedDate);
-        
-        if (reservationInfo) {
-          const isStockDepleted = reservationInfo.reservations >= reservationInfo.stockTotal;
-          if (isStockDepleted) {
-            console.log(`Date ${formattedDate} désactivée : stock épuisé`);
-            return true; // Désactive la date si le stock est épuisé
-          }
-        }
-        
-        return false; // Sinon, la date est disponible
-      },
-      fetchReservations() {
+      const formattedDate = date.toISOString().split('T')[0];
+
+      // Vérifie si la date est dans les jours désactivés
+      return this.disabledRanges.some(
+        (disabledDate) => disabledDate.toISOString().split('T')[0] === formattedDate
+      );
+    },
+
+    
+    updateDisabledRanges() {
+  this.disabledRanges = []; // Réinitialise les jours désactivés
+  console.log("Mise à jour des plages désactivées", this.reservations);
+
+  // Parcourt chaque jour dans les plages de dates
+  const stockByDate = {}; // Stocke le nombre de réservations par date
+
+  this.reservations.forEach((reservation) => {
+    const startDate = new Date(reservation.dateDepart);
+    const endDate = new Date(reservation.dateRetour);
+
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      const formattedDate = currentDate.toISOString().split("T")[0];
+
+      // Incrémente le compteur pour cette date
+      if (!stockByDate[formattedDate]) {
+        stockByDate[formattedDate] = 1;
+      } else {
+        stockByDate[formattedDate]++;
+      }
+
+      currentDate.setDate(currentDate.getDate() + 1); // Passe au jour suivant
+    }
+  });
+
+  // Désactive les jours où le stock est épuisé
+  Object.keys(stockByDate).forEach((date) => {
+    const totalReservations = stockByDate[date];
+    const stockTotal = this.reservations[0]?.Stock || 0; // Suppose que le stock est constant
+    console.log("stock total",stockTotal);
+    if (totalReservations >= stockTotal) {
+      console.log(`Date désactivée : ${date} (stock épuisé)`);
+      this.disabledRanges.push(new Date(date));
+    }
+  });
+
+  console.log("Jours désactivés :", this.disabledRanges);
+},
+
+
+fetchReservations() {
   this.isLoading = true;
   axios
     .get(
@@ -105,6 +140,9 @@
     .then((response) => {
       this.reservations = response.data; // Stocke les données de réservation
       console.log("Réservations chargées :", this.reservations);
+
+      // Met à jour les plages désactivées
+      this.updateDisabledRanges();
     })
     .catch((error) => {
       console.error("Erreur lors du chargement des réservations", error);
@@ -115,40 +153,35 @@
     });
 },
 
-      formatDate(date) {
-        return new Date(date).toISOString().split("T")[0];
-      },
-      submitReservation() {
-        this.isLoading = true;
-        this.errorMessage = "";
-        console.log("Fetching reservations for game ID:", this.idJeu, "and library ID:", this.idLudotheque);
-        console.log(this.dateRange);
-        const reservationData = {
-          borrowDate: this.formatDate(this.dateRange[0]),
-          returnDate: this.formatDate(this.dateRange[1]),
-          userId: String(JSON.parse(localStorage.getItem("entity")).idUser),
-          idJeu: this.idJeu,
-          idLudotheque: this.idLudotheque,
-        };
-        axios
-          .post(`http://localhost:3000/catalogue/reservation`, reservationData)
-          .then(() => {
-            alert("Réservation effectuée avec succès !");
-            this.fetchReservations();
-          })
-          .catch((error) => {
-            if (error.response && error.response.data.error === 2) {
-              this.errorMessage = "Erreur : le Jeu est déjà réservé à cette date !";
-            } else {
-              console.error("Erreur lors de la réservation :", error);
-              this.errorMessage = "Erreur lors de la réservation.";
-            }
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      },
-    },
+formatDate(date) {
+    return new Date(date).toISOString().split("T")[0];
+  },
+submitReservation() {
+    this.isLoading = true;
+    this.errorMessage = "";
+    console.log("Fetching reservations for game ID:", this.idJeu, "and library ID:", this.idLudotheque);
+    console.log(this.dateRange);
+    const reservationData = {
+      borrowDate: this.formatDate(this.dateRange[0]),
+      returnDate: this.formatDate(this.dateRange[1]),
+      userId: String(JSON.parse(localStorage.getItem("entity")).idUser),
+      idJeu: this.idJeu,
+      idLudotheque: this.idLudotheque,
+    };
+    axios
+      .post(`http://localhost:3000/catalogue/reservation`, reservationData)
+      .then(() => {
+        alert("Réservation effectuée avec succès !");
+        this.fetchReservations();
+      })
+      .catch((error) => {
+        this.errorMessage = error.response.data.error;
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  },
+},
     mounted() {
       this.idJeu = this.$route.query.idJeu;
       this.idLudotheque = this.$route.query.idLudotheque;
