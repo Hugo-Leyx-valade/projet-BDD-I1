@@ -5,6 +5,8 @@
       <li><router-link to="/ludotheques">Ludotheques</router-link></li>
       <li><router-link to="/about">À propos</router-link></li>
       <li><router-link to="/contact">Contact</router-link></li>
+      <li><router-link to="/profile">Mon profil</router-link>
+      </li>
     </ul>
   </nav>
 </template>

@@ -11,6 +11,8 @@ import about from '@/components/about.vue';
 import contact from '@/components/contact.vue';
 import ludothequePage from '@/components/ludothequePage.vue';
 import EventCreation from '@/components/EventCreation.vue';
+import profile from '@/components/profile.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -115,6 +117,20 @@ const router = createRouter({
         }else{
           next('/Login');
           alert("Vous n'êtes pas authentifié !")
+        }
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: profile,
+      beforeEnter: (to, from, next) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          alert("Vous devez être connecté.");
+          next('/Login');
+        } else {
+          next();
         }
       }
     }
