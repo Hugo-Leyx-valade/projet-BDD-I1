@@ -1,6 +1,7 @@
 export function isAuthenticated() {
-    return localStorage.getItem('auth_token') !== null;
-  }
+  return localStorage.getItem('userId') !== null; // ✅ Correct
+}
+
 
 export function retrieveRole(){
   return localStorage.getItem('entity');

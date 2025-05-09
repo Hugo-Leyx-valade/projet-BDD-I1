@@ -70,13 +70,16 @@ export default {
         if (data.error) {
           console.error('Erreur :', data.error);
         } else {
-          console.log(data)
+          console.log(data);
           console.log('Succès :', data.message);
-          const token = data.token;
-          loginUser(token);
-          localStorage.setItem('entity', JSON.stringify(data.user));
-          window.location.href = "/catalogue";
-        }
+
+          if (data.user && data.user.idUser) {
+            localStorage.setItem('userId', data.user.idUser);
+          }
+
+        localStorage.setItem('entity', JSON.stringify(data.user));
+        window.location.href = "/catalogue";
+      }
       })
       .catch(error => console.error('Erreur :', error));
     }
