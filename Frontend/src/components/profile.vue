@@ -31,13 +31,14 @@
       };
     },
     mounted() {
-      axios.get(`/api/users/${this.userId}`)
-        .then(res => this.profile = res.data)
-        .catch(() => alert("Erreur lors du chargement du profil"));
+        axios.get(`http://localhost:3000/api/users/${this.userId}`)
+
+            .then(res => this.profile = res.data)
+            .catch(() => alert("Erreur lors du chargement du profil"));
     },
     methods: {
       saveProfile() {
-        axios.put(`/api/users/${this.userId}`, this.profile)
+        axios.put(`http://localhost:3000/api/users/${this.userId}`, this.profile)
           .then(() => alert("Modifications enregistrées"))
           .catch(() => alert("Erreur lors de la mise à jour"));
       }

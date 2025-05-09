@@ -6,7 +6,7 @@ const port = 3000;
 
 app.use(cors({
   origin: 'http://localhost:5173', // Autoriser uniquement cette origine
-  methods: 'GET,POST', // Autoriser uniquement les méthodes GET et POST
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: 'Content-Type,Authorization', // Autoriser uniquement ces en-têtes
   credentials: true // Autoriser les informations d'identification
 }));
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 // Routes pour les users (redirige vers routes/users.js) 
 const userRoutes = require('./routes/users');
-app.use('/users', userRoutes);
+app.use('/api/users', userRoutes);
 
 // Routes pour les users (redirige vers routes/users.js) 
 const jeuRoutes = require('./routes/jeux');
