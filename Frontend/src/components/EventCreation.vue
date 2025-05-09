@@ -74,7 +74,7 @@
     },
     methods: {
       goToLudotheque(id) {
-      this.$router.push(`/ludothequesPage/${id}`);
+      window.location.href = `/ludothequesPage/${id}`;
     },
 
       fetchGames() {
