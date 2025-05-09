@@ -51,7 +51,7 @@ export default {
       this.isLogin = !this.isLogin;
     },
     submitForm() {
-      const url = this.isLogin ? 'http://localhost:3000/users/login' : 'http://localhost:3000/users/register';
+      const url = this.isLogin ? 'http://localhost:3000/api/users/login' : 'http://localhost:3000/api/users/register';
       fetch(url, {
         method: 'POST',
         credentials: 'include',

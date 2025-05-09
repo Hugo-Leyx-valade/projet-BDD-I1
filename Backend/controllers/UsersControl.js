@@ -73,3 +73,20 @@ exports.loginUser = (req, res) => {
   })
   });
 };
+
+exports.updateUserById = (req, res) => {
+  const userId = req.params.id;
+  const { pseudo, email, idDepartement } = req.body;
+
+  db.query(
+    'UPDATE Users SET Pseudo = ?, Email = ?, idDepartement = ? WHERE idUser = ?',
+    [pseudo, email, idDepartement, userId],
+    (err, results) => {
+      if (err) {
+        console.log("Erreur MySQL :", err);
+        return res.status(500).json({ error: 'Erreur MySQL' });
+      }
+      res.status(200).json({ message: 'Profil mis à jour' });
+    }
+  );
+};
