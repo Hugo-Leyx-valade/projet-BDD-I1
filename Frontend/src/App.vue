@@ -3,6 +3,9 @@
     <!-- Barre latérale (au-dessus de la navbar) -->
     <header class="sidebar">
       <h1 class="app-name">Ludo Hub</h1>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
     </header>
 
     <!-- Navbar -->
@@ -28,6 +31,7 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "M PLUS Rounded 1c", sans-serif;
 }
 
 /* Barre latérale - au-dessus de la navbar */
@@ -90,7 +94,7 @@ export default {
 
 /* Contenu sous la navbar */
 .content {
-  margin-top: 120px; /* Décale le contenu pour qu'il ne soit pas masqué par la navbar */
+  margin-top: 100px; /* Décale le contenu pour qu'il ne soit pas masqué par la navbar */
   padding: 2rem;
   width: 100%;
   box-sizing: border-box;
@@ -103,7 +107,7 @@ export default {
 /* Styles généraux pour les titres */
 h2 {
   text-align: center;
-  color: #2e4a3c;
+  color: #4a302e;
   margin-bottom: 2rem;
   font-size: 2rem;
 }

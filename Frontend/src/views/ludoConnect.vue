@@ -38,7 +38,7 @@
     data() {
       return {
         isLogin: true,
-        pseudo: 'pipi',
+        pseudo: '',
         email: '',
         password: '',
         departement:1,
