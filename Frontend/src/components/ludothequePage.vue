@@ -21,11 +21,11 @@
         <div v-for="event in events" :key="event.idEvenement" class="event-card">
           <h4>{{ event.eventName }}</h4>
           <p><strong>Date :</strong> {{ formatDate(event.Date) }}</p>
-          <p><strong>Places restantes :{{ numberOfParticipant(participants, event.id) }} / </strong> {{ event.maxParticipant }}</p>
+          <p><strong>Places restantes :{{ numberOfParticipant(participants, event.idEvenement) }} / </strong> {{ event.maxParticipant }}</p>
           <p><strong>Jeu :</strong> {{ event.Title }}</p>
           <button
-            v-if="user.Role === 3 && !alreadyParticiped.includes(event.idEvenement)"
-            @click="goToParticipe(event.idEvenement, user.idUser)"
+            v-if="user.Role === 3 && !alreadyParticiped.includes(event.idEvenement) && numberOfParticipant(participants, event.idEvenement) <= event.maxParticipant"
+            @click="goToParticipe(event.idEvenement, user.idUser),refreshPage()"
             class="participate-button"
           >
             Participer
@@ -61,9 +61,11 @@ export default {
     if (to.params.id !== from.params.id) {
       this.idLudotheque = to.params.id;
       this.fetchEvents(this.idLudotheque);
+      window.location.reload();
     } else {
       // Recharge les événements si on revient sur la même route
       this.fetchEvents(this.idLudotheque);
+      window.location.reload();
     }
   },
   participants(newParticipants) {
@@ -127,12 +129,16 @@ export default {
         });
     },
     numberOfParticipant(participants, idEvent) {
+      console.log("je suis la :", idEvent);
       let count = 0;
       for (let i = 0; i < participants.length; i++) {
-        if (participants[i].idEvent === idEvent) {
+        console.log("je suis la aussi :", participants[i].idEvenement);
+        if (participants[i].idEvenement === idEvent) {
           count++;
+          console.log("petrushka", count );
         }
       }
+      console.log("Nombre de participants pour l'événement", idEvent, ":", count);
       return count;
     }, 
     formatDate(date) {
