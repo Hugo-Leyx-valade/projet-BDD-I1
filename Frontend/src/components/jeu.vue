@@ -90,6 +90,15 @@ import router from '@/router';
   </script>
   
   <style scoped>
+  .catalog-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Assure que l'application occupe toute la hauteur de la fenêtre */
+    background-color: #ece0d1;
+    margin-top: 100px;;
+  }
+
   .game-details-container {
     display: flex;
     flex-direction: column;

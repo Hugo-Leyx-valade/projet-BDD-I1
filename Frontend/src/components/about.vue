@@ -25,7 +25,6 @@ export default {
   background-color: #00a2ff00;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center; /* Centre le contenu horizontalement */
-  margin-top: -3%;
 }
 
 .title {
@@ -34,4 +33,5 @@ export default {
   margin-bottom: 2rem;
   font-size: 3rem;
 }
+
 </style>
