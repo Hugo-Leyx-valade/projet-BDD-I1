@@ -54,6 +54,7 @@ CREATE TABLE Stock (
 
 CREATE TABLE Evenement (
   idEvenement INT PRIMARY KEY AUTO_INCREMENT,
+  eventName varchar(100),
   maxParticipant INT CHECK (maxParticipant > 0),
   Date DATE NOT NULL,
   idLudotheque INT NOT NULL,
@@ -424,63 +425,25 @@ CREATE INDEX idx_user_email ON Users(Email);
 
 CREATE INDEX idx_jeu_nom ON Jeu(Title);
 
+CREATE INDEX idx_jeu ON Jeu(id, Title, Yearpublished, Minplayers, Maxplayers, Minplaytime, Maxplaytime, Playtime);
+
 CREATE INDEX idx_stock_jeu_ludo ON Stock(idJeu, idludotheque);
-
-/* Création des Triggers */ 
-
-DELIMITER $$
-
-CREATE TRIGGER update_stock_after_rental
-AFTER INSERT ON Loue
-FOR EACH ROW
-BEGIN
-  UPDATE Stock
-  SET Stock = Stock - 1
-  WHERE idJeu = NEW.Jeu_id
-    AND idLudotheque = (
-      SELECT idLudotheque 
-      FROM Ludotheque 
-      LIMIT 1
-    );
-END $$
-
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER trg_return_stock
-AFTER UPDATE ON Loue
-FOR EACH ROW
-BEGIN
-  IF NEW.dateRetour IS NOT NULL THEN
-    UPDATE Stock
-    SET Stock = Stock + 1
-    WHERE idJeux = NEW.Jeu_id
-      AND idludotheque = (SELECT idludotheque FROM ludotheque LIMIT 1);
-  END IF;
-END $$
-
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER trg_low_stock_alert
-AFTER UPDATE ON Stock
-FOR EACH ROW
-BEGIN
-  IF NEW.Stock < 2 THEN
-    INSERT INTO Alertes (message) VALUES (CONCAT('Stock faible pour le jeu ID ', NEW.idJeu));
-  END IF;
-END$$
-
-DELIMITER ;
-/* Louer un jeu */
 
 DELIMITER //
 
-CREATE PROCEDURE LouerJeu(IN userId INT, IN jeuId INT, IN dateD DATE)
+CREATE PROCEDURE LouerJeu(IN userId INT, IN idJeu INT, IN borrowDate DATE, IN returnDate DATE, IN idLudotheque INT)
 BEGIN
-  INSERT INTO Loue (dateDepart, User_idUser, Jeu_id)
-  VALUES (dateD, userId, jeuId);
+   SELECT COUNT(*) AS totalReservations, Stock.Stock AS stockTotal
+    FROM Loue
+    JOIN Stock ON Loue.Jeu_id = Stock.idJeu
+    WHERE Stock.idLudotheque = ?
+      AND Stock.idJeu = ?
+      AND (
+        (dateDepart <= ? AND dateRetour >= ?) OR
+        (dateDepart <= ? AND dateRetour >= ?) OR
+        (dateDepart >= ? AND dateRetour <= ?)
+      )
+    GROUP BY Stock.Stock;
 END;
 //
 

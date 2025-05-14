@@ -33,7 +33,7 @@ exports.postEventByIdLudo = (req, res) => {
 
 exports.getEventByIdLudo = (req, res) => {
     const ludothequeId = req.params.id;
-    db.query('SELECT * FROM Evenement Join Jeu on Evenement.idJeu = Jeu.id WHERE idLudotheque = ?', [ludothequeId], (err, results) => {
+    db.query('SELECT * FROM Evenement Join Jeu on Evenement.idJeu = Jeu.id WHERE idLudotheque = ? and Evenement.Date >= now();', [ludothequeId], (err, results) => {
       if (err) {
         return res.status(500).json({ error: 'Erreur lors de la connexion à la base de données' });
       }
@@ -79,19 +79,44 @@ exports.postParticipation = (req, res) => {
             return res.status(400).json({ error: 'Utilisateur déjà inscrit à cet événement' });
         }
 
-        // Si l'utilisateur n'est pas inscrit, insérez la participation
-        const insertSql = `
-            INSERT INTO Participe (idUser, idEvenement)
-            VALUES (?, ?);
+        // Vérifie si la date de l'événement est postérieure à aujourd'hui
+        const dateCheckSql = `
+            SELECT Date FROM Evenement
+            WHERE idEvenement = ?;
         `;
 
-        db.query(insertSql, [idUser, idEvenement], (err, results) => {
+        db.query(dateCheckSql, [idEvenement], (err, results) => {
             if (err) {
-                console.error("Erreur MySQL lors de l'insertion :", err);
-                return res.status(500).json({ error: 'Erreur MySQL lors de l\'insertion' });
+                console.error("Erreur MySQL lors de la vérification de la date :", err);
+                return res.status(500).json({ error: 'Erreur MySQL lors de la vérification de la date' });
             }
 
-            res.json({ message: 'Participation ajoutée avec succès', results });
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'Événement introuvable' });
+            }
+
+            const eventDate = new Date(results[0].Date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Réinitialise l'heure pour comparer uniquement les dates
+
+            if (eventDate <= today) {
+                return res.status(400).json({ error: 'Impossible de participer à un événement passé ou en cours' });
+            }
+
+            // Si la date est valide, insérez la participation
+            const insertSql = `
+                INSERT INTO Participe (idUser, idEvenement)
+                VALUES (?, ?);
+            `;
+
+            db.query(insertSql, [idUser, idEvenement], (err, results) => {
+                if (err) {
+                    console.error("Erreur MySQL lors de l'insertion :", err);
+                    return res.status(500).json({ error: 'Erreur MySQL lors de l\'insertion' });
+                }
+
+                res.json({ message: 'Participation ajoutée avec succès', results });
+            });
         });
     });
 };

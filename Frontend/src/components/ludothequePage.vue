@@ -13,7 +13,7 @@
     </div>
 
     <div class="games-container" v-if="!isLoading">
-  <h3>Jeux :</h3>
+  <h3 style="color: grey;">Jeux :</h3>
   <div v-if="games.length === 0" class="no-events">
     Aucun Jeu n'est disponible dans cette ludothèque.
   </div>
@@ -29,7 +29,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="jeu in jeux">
+          <tr v-for="jeu in games" :key="jeu.id">
             <td><router-link :to="{ name: 'jeu', params: { id: jeu.id } }">{{ jeu.Title }}</router-link></td>
             <td>{{ jeu.Yearpublished }}</td>
             <td>{{ jeu.Minplayers }} à {{ jeu.Maxplayers }}</td>
@@ -37,12 +37,12 @@
           </tr>
         </tbody>
       </table>
-    </div>z
+    </div>
   </div>
 </div>
 
     <div class="events-container">
-      <h3>Événements :</h3>
+      <h3 style="color: grey;">Événements :</h3>
       <div v-if="events.length === 0" class="no-events">
         Aucun événement n'est disponible pour cette ludothèque.
       </div>
@@ -345,16 +345,18 @@ export default {
 
 .games-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse:collapse;
   margin: 1rem 0;
   font-size: 1rem;
   text-align: left;
+  border-radius: 60%;
 }
 
 .games-table th,
 .games-table td {
   border: 1px solid #ddd;
   padding: 0.75rem;
+  color: #333;
 }
 
 .games-table th {
@@ -376,7 +378,7 @@ export default {
   color: white;
   padding: 5px 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 0.9rem;
 }
