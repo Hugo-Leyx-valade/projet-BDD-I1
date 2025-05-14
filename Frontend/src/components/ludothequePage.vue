@@ -12,6 +12,35 @@
       <button @click="goToEventCreation(this.idLudotheque)">Créer un événement</button>
     </div>
 
+    <div class="games-container" v-if="!isLoading">
+  <h3>Jeux :</h3>
+  <div v-if="games.length === 0" class="no-events">
+    Aucun Jeu n'est disponible dans cette ludothèque.
+  </div>
+  <div v-else>
+    <div class="table-container">
+      <table class="games-table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Année</th>
+            <th>Joueurs</th>
+            <th>Temps de jeu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="jeu in jeux">
+            <td><router-link :to="{ name: 'jeu', params: { id: jeu.id } }">{{ jeu.Title }}</router-link></td>
+            <td>{{ jeu.Yearpublished }}</td>
+            <td>{{ jeu.Minplayers }} à {{ jeu.Maxplayers }}</td>
+            <td>{{ jeu.Minplaytime }} - {{ jeu.Maxplaytime }} min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>z
+  </div>
+</div>
+
     <div class="events-container">
       <h3>Événements :</h3>
       <div v-if="events.length === 0" class="no-events">
@@ -50,6 +79,8 @@ export default {
       events: [], // Liste des événements
       participants:[],
       alreadyParticiped:[],
+      games: [], // Liste des jeux
+      isLoading: true, // Indicateur de chargement
     };
   },
   components: {
@@ -87,6 +118,17 @@ export default {
           "Erreur lors du chargement des informations de la ludothèque",
           error
         );
+      });
+
+      axios
+      .get(`http://localhost:3000/catalogue/ludotheque/${idLudotheque}`)
+      .then((response) => {
+        this.games = response.data;
+        this.isLoading = false; // Fin du chargement
+        console.log("Jeux récupérés :", this.games);
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement des jeux :", error);
       });
 
     // Récupère les événements associés à la ludothèque
@@ -300,4 +342,46 @@ export default {
   background-color: #ccc; /* Couleur grise pour un bouton désactivé */
   cursor: not-allowed;
 }
-</style>
+
+.games-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.games-table th,
+.games-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+}
+
+.games-table th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+.games-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.games-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.games-table td button {
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.games-table td button:hover {
+  background-color: #218838;
+}
+</style>  

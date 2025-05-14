@@ -25,6 +25,16 @@ exports.getJeuById = (req, res) => {
 };
 
 
+exports.getJeuByIdLudotheque = (req, res) => {
+  const idLudotheque = req.params.idLudotheque;
+  db.query('SELECT * FROM Jeu JOIN Stock ON Stock.idJeu = Jeu.id WHERE Stock.idLudotheque = ?;', [idLudotheque], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erreur MySQL' });
+    }
+    res.json(results);
+  });
+}
+
 exports.allReservationFaraGame = (req, res) => {
   const idJeu = req.params.idJeu;
   const idLudo = req.params.idLudotheque;
