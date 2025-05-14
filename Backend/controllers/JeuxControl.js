@@ -25,10 +25,20 @@ exports.getJeuById = (req, res) => {
 };
 
 
+exports.getJeuByIdLudotheque = (req, res) => {
+  const idLudotheque = req.params.idLudotheque;
+  db.query('SELECT * FROM Jeu JOIN Stock ON Stock.idJeu = Jeu.id WHERE Stock.idLudotheque = ?;', [idLudotheque], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erreur MySQL' });
+    }
+    res.json(results);
+  });
+}
+
 exports.allReservationFaraGame = (req, res) => {
   const idJeu = req.params.idJeu;
   const idLudo = req.params.idLudotheque;
-  db.query('select * from Loue Join Jeu on Loue.Jeu_id = Jeu.id Join Stock on Stock.idJeu= Jeu.id where Stock.idLudotheque = ? AND Stock.idJeu = ?;', [idLudo,idJeu], (err, results) => {
+  db.query('select * from Loue JOIN Stock on Stock.idLudotheque = Loue.Ludotheque_idLudotheque where Ludotheque_idLudotheque = ? and idJeu = ?;', [idLudo,idJeu], (err, results) => {
     console.log(results);
     if (err) {
       return res.status(500).json({ error: 'Erreur MySQL' });
@@ -75,13 +85,13 @@ exports.reserveJeu = (req, res) => {
 
       // Si le stock est disponible, insérer la réservation
       const insertReservationSql = `
-        INSERT INTO Loue (dateDepart, dateRetour, User_idUser, Jeu_id)
-        VALUES (?, ?, ?, ?);
+        INSERT INTO Loue (dateDepart, dateRetour, User_idUser, Jeu_id, Ludotheque_idLudotheque)
+        VALUES (?, ?, ?, ?, ?);
       `;
       console.log("je suis la pour la data",userId,idJeu);
       db.query(
         insertReservationSql,
-        [borrowDate, returnDate, userId, idJeu],
+        [borrowDate, returnDate, userId, idJeu, idLudotheque],
         (err, results) => {
           if (err) {
             console.error("Erreur MySQL lors de l'insertion de la réservation :", err);
