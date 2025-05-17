@@ -7,6 +7,7 @@ router.get('/', jeuController.getAllJeux);
 router.get('/:id', jeuController.getJeuById);
 router.get('/:idJeu/:idLudotheque/reservation', jeuController.allReservationFaraGame);
 router.post('/reservation', jeuController.reserveJeu);
+router.get('/ludotheque/:idLudotheque', jeuController.getJeuByIdLudotheque);
 
 
 module.exports = router;

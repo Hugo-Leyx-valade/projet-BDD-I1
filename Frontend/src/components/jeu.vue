@@ -78,6 +78,7 @@ import router from '@/router';
       if (reserveButton) {
         const gameId = this.$route.params.id; // ID du jeu
         const ludothequeId = reserveButton.getAttribute('data-ludotheque-id'); // ID de la ludothèque
+        console.log("le numero de la ludo",ludothequeId);
         this.$router.push({
           path: `/reservation`,
           query: { idJeu: gameId, idLudotheque: ludothequeId },

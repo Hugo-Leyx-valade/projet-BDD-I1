@@ -12,8 +12,37 @@
       <button @click="goToEventCreation(this.idLudotheque)">Créer un événement</button>
     </div>
 
+    <div class="games-container" v-if="!isLoading">
+  <h3 style="color: grey;">Jeux :</h3>
+  <div v-if="games.length === 0" class="no-events">
+    Aucun Jeu n'est disponible dans cette ludothèque.
+  </div>
+  <div v-else>
+    <div class="table-container">
+      <table class="games-table">
+        <thead>
+          <tr>
+            <th>Titre</th>
+            <th>Année</th>
+            <th>Joueurs</th>
+            <th>Temps de jeu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="jeu in games" :key="jeu.id">
+            <td><router-link :to="{ name: 'jeu', params: { id: jeu.id } }">{{ jeu.Title }}</router-link></td>
+            <td>{{ jeu.Yearpublished }}</td>
+            <td>{{ jeu.Minplayers }} à {{ jeu.Maxplayers }}</td>
+            <td>{{ jeu.Minplaytime }} - {{ jeu.Maxplaytime }} min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
     <div class="events-container">
-      <h3>Événements :</h3>
+      <h3 style="color: grey;">Événements :</h3>
       <div v-if="events.length === 0" class="no-events">
         Aucun événement n'est disponible pour cette ludothèque.
       </div>
@@ -21,11 +50,11 @@
         <div v-for="event in events" :key="event.idEvenement" class="event-card">
           <h4>{{ event.eventName }}</h4>
           <p><strong>Date :</strong> {{ formatDate(event.Date) }}</p>
-          <p><strong>Places restantes :{{ numberOfParticipant(participants, event.id) }} / </strong> {{ event.maxParticipant }}</p>
+          <p><strong>Places restantes :{{ numberOfParticipant(participants, event.idEvenement) }} / </strong> {{ event.maxParticipant }}</p>
           <p><strong>Jeu :</strong> {{ event.Title }}</p>
           <button
-            v-if="user.Role === 3 && !alreadyParticiped.includes(event.idEvenement)"
-            @click="goToParticipe(event.idEvenement, user.idUser)"
+            v-if="user.Role === 3 && !alreadyParticiped.includes(event.idEvenement) && numberOfParticipant(participants, event.idEvenement) <= event.maxParticipant"
+            @click="goToParticipe(event.idEvenement, user.idUser),refreshPage()"
             class="participate-button"
           >
             Participer
@@ -50,6 +79,8 @@ export default {
       events: [], // Liste des événements
       participants:[],
       alreadyParticiped:[],
+      games: [], // Liste des jeux
+      isLoading: true, // Indicateur de chargement
     };
   },
   components: {
@@ -61,9 +92,11 @@ export default {
     if (to.params.id !== from.params.id) {
       this.idLudotheque = to.params.id;
       this.fetchEvents(this.idLudotheque);
+      window.location.reload();
     } else {
       // Recharge les événements si on revient sur la même route
       this.fetchEvents(this.idLudotheque);
+      window.location.reload();
     }
   },
   participants(newParticipants) {
@@ -85,6 +118,17 @@ export default {
           "Erreur lors du chargement des informations de la ludothèque",
           error
         );
+      });
+
+      axios
+      .get(`http://localhost:3000/catalogue/ludotheque/${idLudotheque}`)
+      .then((response) => {
+        this.games = response.data;
+        this.isLoading = false; // Fin du chargement
+        console.log("Jeux récupérés :", this.games);
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement des jeux :", error);
       });
 
     // Récupère les événements associés à la ludothèque
@@ -127,12 +171,16 @@ export default {
         });
     },
     numberOfParticipant(participants, idEvent) {
+      console.log("je suis la :", idEvent);
       let count = 0;
       for (let i = 0; i < participants.length; i++) {
-        if (participants[i].idEvent === idEvent) {
+        console.log("je suis la aussi :", participants[i].idEvenement);
+        if (participants[i].idEvenement === idEvent) {
           count++;
+          console.log("petrushka", count );
         }
       }
+      console.log("Nombre de participants pour l'événement", idEvent, ":", count);
       return count;
     }, 
     formatDate(date) {
@@ -294,4 +342,48 @@ export default {
   background-color: #ccc; /* Couleur grise pour un bouton désactivé */
   cursor: not-allowed;
 }
-</style>
+
+.games-table {
+  width: 100%;
+  border-collapse:collapse;
+  margin: 1rem 0;
+  font-size: 1rem;
+  text-align: left;
+  border-radius: 60%;
+}
+
+.games-table th,
+.games-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  color: #333;
+}
+
+.games-table th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+.games-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.games-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.games-table td button {
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.games-table td button:hover {
+  background-color: #218838;
+}
+</style>  
