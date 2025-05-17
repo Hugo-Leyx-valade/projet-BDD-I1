@@ -114,8 +114,8 @@ export default {
             idUser: user.idUser
           };
           this.profile = {
-            pseudo: this.userId.Pseudo,
-            email: this.userId.Email,
+            pseudo: this.userId.pseudo,
+            email: this.userId.email,
             idDepartement: this.userId.idDepartement
           };
         })
@@ -133,7 +133,7 @@ export default {
         .catch(() => alert("Erreur lors du chargement des participations"));
     },
     saveProfile() {
-      axios.put(`http://localhost:3000/api/users/${this.userId}`, this.profile)
+      axios.put(`http://localhost:3000/api/users/${this.userId.idUser}`, this.profile)
         .then(() => alert("Modifications enregistrées"))
         .catch(() => alert("Erreur lors de la mise à jour"));
     },
