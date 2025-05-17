@@ -97,9 +97,6 @@ exports.reservationByIdUser = (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Erreur MySQL' });
     }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Aucune réservation trouvée' });
-    }
     res.json(results);
   });
 };
@@ -109,9 +106,6 @@ exports.participationByIdUser = (req, res) => {
   db.query('Select * from Participe Join Evenement on Evenement.idEvenement = Participe.idEvenement join Ludotheque on Ludotheque.idLudotheque = Evenement.idLudotheque where Participe.idUser = ? and Evenement.Date >= now();', [userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Erreur MySQL' });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Aucune réservation trouvée' });
     }
     res.json(results);
   });
