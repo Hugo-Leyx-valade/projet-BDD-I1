@@ -12,6 +12,29 @@
       <button @click="goToEventCreation(this.idLudotheque)">Créer un événement</button>
     </div>
 
+  <!-- BOUTON AJOUTER UN JEU -->
+    <div v-if="user.Role === 2 && parseInt(user.idUser) === parseInt(idLudotheque)" class="add-game-btn-container">
+      <button @click="showAddGameForm = !showAddGameForm" class="add-game-btn">
+        {{ showAddGameForm ? 'Fermer' : 'Ajouter un jeu à la ludothèque' }}
+      </button>
+    </div>
+
+    <!-- FORMULAIRE AJOUT DE JEU AVEC FADE -->
+    <transition name="fade">
+      <form v-if="showAddGameForm" class="add-game-form" @submit.prevent="addGameToLudo">
+        <label for="selectGame">Jeu :</label>
+        <select v-model="selectedGameId" id="selectGame" required>
+          <option value="" disabled>Choisir un jeu</option>
+          <option v-for="game in allGames" :key="game.id" :value="game.id">
+            {{ game.Title }}
+          </option>
+        </select>
+        <label for="stock">Stock :</label>
+        <input type="number" id="stock" v-model.number="stockToAdd" min="1" required />
+        <button type="submit" class="add-game-submit-btn">Ajouter</button>
+      </form>
+    </transition>
+
     <div class="games-container" v-if="!isLoading">
   <h3 style="color: grey;">Jeux :</h3>
   <div v-if="games.length === 0" class="no-events">
@@ -81,6 +104,10 @@ export default {
       alreadyParticiped:[],
       games: [], // Liste des jeux
       isLoading: true, // Indicateur de chargement
+      showAddGameForm: false,
+      allGames: [],
+      selectedGameId: "",
+      stockToAdd: 1,
     };
   },
   components: {
@@ -134,8 +161,46 @@ export default {
     // Récupère les événements associés à la ludothèque
     this.fetchEvents(idLudotheque);
     this.fetchParticipants(idLudotheque);
+
+    axios
+      .get("http://localhost:3000/catalogue/")
+      .then((response) => {
+        this.allGames = response.data;
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement de tous les jeux :", error);
+      });
   },
   methods: {
+
+    addGameToLudo() {
+      if (!this.selectedGameId || !this.stockToAdd) return;
+      axios
+        .post("http://localhost:3000/ludotheque/addToLudo", {
+          idLudotheque: this.idLudotheque,
+          idJeu: this.selectedGameId,
+          stock: this.stockToAdd,
+        })
+        .then(() => {
+          this.showAddGameForm = false;
+          this.selectedGameId = "";
+          this.stockToAdd = 1;
+          this.$nextTick(() => this.fetchGames());
+        })
+        .catch((error) => {
+          alert("Erreur lors de l'ajout du jeu : " + (error.response?.data?.error || error.message));
+        });
+    },
+    fetchGames() {
+      axios
+        .get(`http://localhost:3000/catalogue/ludotheque/${this.idLudotheque}`)
+        .then((response) => {
+          this.games = response.data;
+        })
+        .catch((error) => {
+          console.error("Erreur lors du rafraîchissement des jeux :", error);
+        });
+    },
 
     generateAlreadyParticipedArray(idUser) {
       const alreadyParticiped = [];
@@ -385,5 +450,82 @@ export default {
 
 .games-table td button:hover {
   background-color: #218838;
+}
+
+.add-game-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.add-game-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-game-btn:hover {
+  background-color: #0056b3;
+}
+
+.add-game-form {
+  max-width: 400px;
+  margin: 1rem auto 2rem auto;
+  padding: 1.5rem 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: fadeIn 0.5s;
+}
+
+.add-game-form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.add-game-form select,
+.add-game-form input[type="number"] {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.add-game-submit-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.3s;
+}
+
+.add-game-submit-btn:hover {
+  background-color: #218838;
+}
+
+/* Fade transition */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px);}
+  to { opacity: 1; transform: translateY(0);}
 }
 </style>  

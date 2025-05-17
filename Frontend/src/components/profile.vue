@@ -2,7 +2,7 @@
   <Navbar />
   <div class="profile-container">
     <div class="profile-card">
-      <h2 v-if="userId.pseudo">{{ userId.pseudo }}</h2>
+      <h2>{{ userId.Name }}</h2>
       <form @submit.prevent="saveProfile">
         <div class="form-group">
           <label><i class="fas fa-user"></i> Pseudo :</label>
@@ -74,6 +74,7 @@
 <script>
 import axios from 'axios';
 import Navbar from './navbar.vue';
+import UserConnect from '@/views/userConnect.vue';
 
 export default {
   data() {

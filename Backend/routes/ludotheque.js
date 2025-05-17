@@ -7,6 +7,7 @@ router.post('/Login', ludothequeController.loginLudo);
 
 router.get('/', ludothequeController.allLudo);
 router.get('/:id', ludothequeController.getLudoById);
+router.post('/addToLudo', ludothequeController.addToLudo);
 
 
 module.exports = router;

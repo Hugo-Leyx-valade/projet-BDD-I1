@@ -13,14 +13,14 @@ exports.getAllJeux = (req, res) => {
 
 exports.getJeuById = (req, res) => {
   const userId = req.params.id;
-  db.query('select Jeu.Title,Jeu.Description, Jeu.Yearpublished, Jeu.Minplayers, Jeu.Maxplayers, Jeu.Playtime, Jeu.Minplaytime, Jeu.Maxplaytime, Ludotheque.Name, Users.idDepartement, Ludotheque.idLudotheque, Stock.Stock from Jeu join Stock on Stock.idJeu = Jeu.id join Ludotheque on Ludotheque.idLudotheque = Stock.idLudotheque join Users on Users.idUser = Ludotheque.idLudotheque where Jeu.id = ?;', [userId], (err, results) => {
+  db.query('Call getJeuInfos(?);', [userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Erreur MySQL' });
     }
     if (results.length === 0) {
       return res.status(404).json({ error: 'Jeu non trouvé' });
     }
-    res.json(results);
+    res.json(results[0]);
   });
 };
 
@@ -55,17 +55,7 @@ exports.reserveJeu = (req, res) => {
 
   // Vérification des chevauchements de dates et du stock
   const checkAvailabilitySql = `
-    SELECT COUNT(*) AS totalReservations, Stock.Stock AS stockTotal
-    FROM Loue
-    JOIN Stock ON Loue.Jeu_id = Stock.idJeu
-    WHERE Stock.idLudotheque = ?
-      AND Stock.idJeu = ?
-      AND (
-        (dateDepart <= ? AND dateRetour >= ?) OR
-        (dateDepart <= ? AND dateRetour >= ?) OR
-        (dateDepart >= ? AND dateRetour <= ?)
-      )
-    GROUP BY Stock.Stock;
+    CALL reserveJeu(?, ?, ?, ?, ?);
   `;
 
   db.query(

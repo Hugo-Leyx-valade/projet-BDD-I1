@@ -30,8 +30,10 @@ CREATE TABLE Loue (
   Louecol VARCHAR(45),
   User_idUser INT,
   Jeu_id INT,
+  Ludotheque_idLudotheque INT,
   FOREIGN KEY (User_idUser) REFERENCES Users(idUser) ON DELETE CASCADE,
-  FOREIGN KEY (Jeu_id) REFERENCES Jeu(id) ON DELETE CASCADE
+  FOREIGN KEY (Jeu_id) REFERENCES Jeu(id) ON DELETE CASCADE,
+  FOREIGN KEY (Ludotheque_idLudotheque) REFERENCES Ludotheque(idLudotheque) ON DELETE CASCADE
 );
 
 
@@ -427,26 +429,18 @@ CREATE INDEX idx_jeu_nom ON Jeu(Title);
 
 CREATE INDEX idx_jeu ON Jeu(id, Title, Yearpublished, Minplayers, Maxplayers, Minplaytime, Maxplaytime, Playtime);
 
+select idx_jeu;
+
 CREATE INDEX idx_stock_jeu_ludo ON Stock(idJeu, idludotheque);
 
 DELIMITER //
 
-CREATE PROCEDURE LouerJeu(IN userId INT, IN idJeu INT, IN borrowDate DATE, IN returnDate DATE, IN idLudotheque INT)
+CREATE PROCEDURE postparticipation(IN iduser INT, IN idevenement INT)
 BEGIN
-   SELECT COUNT(*) AS totalReservations, Stock.Stock AS stockTotal
-    FROM Loue
-    JOIN Stock ON Loue.Jeu_id = Stock.idJeu
-    WHERE Stock.idLudotheque = ?
-      AND Stock.idJeu = ?
-      AND (
-        (dateDepart <= ? AND dateRetour >= ?) OR
-        (dateDepart <= ? AND dateRetour >= ?) OR
-        (dateDepart >= ? AND dateRetour <= ?)
-      )
-    GROUP BY Stock.Stock;
+   INSERT INTO Participe (idUser, idEvenement)
+	VALUES (iduser, idevenement);
 END;
 //
-
 DELIMITER ;
 
 /* Rendre un jeu */
