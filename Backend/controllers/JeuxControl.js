@@ -55,7 +55,17 @@ exports.reserveJeu = (req, res) => {
 
   // Vérification des chevauchements de dates et du stock
   const checkAvailabilitySql = `
-    CALL reserveJeu(?, ?, ?, ?, ?);
+    SELECT COUNT(*) AS totalReservations, Stock.Stock AS stockTotal
+    FROM Loue
+    JOIN Stock ON Loue.Jeu_id = Stock.idJeu
+    WHERE Stock.idLudotheque = ?
+      AND Stock.idJeu = ?
+      AND (
+        (dateDepart <= ? AND dateRetour >= ?) OR
+        (dateDepart <= ? AND dateRetour >= ?) OR
+        (dateDepart >= ? AND dateRetour <= ?)
+      )
+    GROUP BY Stock.Stock;
   `;
 
   db.query(
