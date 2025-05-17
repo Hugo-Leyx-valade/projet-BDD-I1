@@ -18,8 +18,7 @@ exports.postEventByIdLudo = (req, res) => {
 
     // Requête SQL avec des paramètres préparés
     const sql = `
-        INSERT INTO Evenement (eventName, maxParticipant, Date, idLudotheque, idJeu)
-        VALUES (?, ?, ?, ?, ?);
+        Call postEvent(?, ?, ?, ?, ?);
     `;
 
     db.query(sql, [name, maxParticipants, date, ludothequeId, gameId], (err, results) => {
@@ -105,8 +104,7 @@ exports.postParticipation = (req, res) => {
 
             // Si la date est valide, insérez la participation
             const insertSql = `
-                INSERT INTO Participe (idUser, idEvenement)
-                VALUES (?, ?);
+                Call postparticipation(?, ?);
             `;
 
             db.query(insertSql, [idUser, idEvenement], (err, results) => {

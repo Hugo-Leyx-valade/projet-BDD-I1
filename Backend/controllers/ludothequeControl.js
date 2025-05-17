@@ -108,4 +108,40 @@ exports.loginLudo = async (req, res) => {
       }
       res.status(200).json(results[0]);
     });
+  };
+
+exports.addToLudo = (req, res) => {
+  const { idLudotheque, idJeu, stock } = req.body;
+
+  if (!idLudotheque || !idJeu || !stock || stock < 1) {
+    return res.status(400).json({ error: "Paramètres manquants ou invalides." });
   }
+
+  // Vérifie si le jeu existe déjà dans le stock de la ludothèque
+  const checkSql = "SELECT * FROM Stock WHERE idLudotheque = ? AND idJeu = ?";
+  db.query(checkSql, [idLudotheque, idJeu], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Erreur lors de la vérification du stock." });
+    }
+
+    if (results.length > 0) {
+      // Si le jeu existe déjà, on met à jour le stock
+      const updateSql = "UPDATE Stock SET Stock = Stock + ? WHERE idLudotheque = ? AND idJeu = ?";
+      db.query(updateSql, [stock, idLudotheque, idJeu], (err) => {
+        if (err) {
+          return res.status(500).json({ error: "Erreur lors de la mise à jour du stock." });
+        }
+        return res.status(200).json({ message: "Stock mis à jour avec succès." });
+      });
+    } else {
+      // Sinon, on insère le jeu dans le stock
+      const insertSql = "INSERT INTO Stock (idLudotheque, idJeu, Stock) VALUES (?, ?, ?)";
+      db.query(insertSql, [idLudotheque, idJeu, stock], (err) => {
+        if (err) {
+          return res.status(500).json({ error: "Erreur lors de l'ajout du jeu à la ludothèque." });
+        }
+        return res.status(201).json({ message: "Jeu ajouté à la ludothèque avec succès." });
+      });
+    }
+  });
+};
