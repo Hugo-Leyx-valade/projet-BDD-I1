@@ -197,7 +197,7 @@ submitReservation() {
 
   h2 {
     text-align: center;
-    color: #1af806;
+    color: #333;
     font-weight: bolder;
     margin-bottom: 2rem;
     font-size: 3rem;
@@ -229,7 +229,7 @@ submitReservation() {
 
   <style scoped>
   button {
-  background-color: #1af806;
+  background-color: #466f42;;
   color: white;
   border: none;
   padding: 10px 20px;
