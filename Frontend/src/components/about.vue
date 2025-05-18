@@ -35,7 +35,7 @@ export default {
       team: [
         {
           name: 'Victor',
-          role: 'Développeur & CIL (Cyber Sécurité, Ifrastructure et Logiciel)', 
+          role: 'Développeur & CIL (Cyber Sécurité, Infrastructure et Logiciel)', 
           image: 'https://avatars.githubusercontent.com/u/115532904?v=4',
         },
         {
@@ -45,12 +45,12 @@ export default {
         },
         {
           name: 'Léopold',
-          role: 'Développeur & CIL (Cyber Sécurité, Ifrastructure et Logiciel)',
+          role: 'Développeur & CIL (Cyber Sécurité, Infrastructure et Logiciel)',
           image: 'https://preview.redd.it/anyone-got-tips-for-carl-v0-b8okhjk19hrd1.png?width=1200&format=png&auto=webp&s=ba9c248632112fdb83a0e98c4955d3fe4acd47bc',
         },
         {
           name: 'Steeve',
-          role: 'Développeur & CIL (Cyber Sécurité, Ifrastructure et Logiciel)',
+          role: 'Développeur & CIL (Cyber Sécurité, Infrastructure et Logiciel)',
           image: 'https://i.pinimg.com/736x/8d/e8/72/8de87212e16e9f6e02dc8e24aa1a1baa.jpg',
         },
       ],
